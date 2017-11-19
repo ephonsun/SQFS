@@ -1,15 +1,15 @@
 10
 
 dir
-256
+306
 svn://192.168.188.33/sqfs/src/main/java/com/sqfs/provider
 svn://192.168.188.33
 
 
 
-2017-11-17T04:08:18.990534Z
-235
-liangshizhong
+2017-11-19T06:48:47.075583Z
+304
+chenshaohua
 
 
 svn:special svn:externals svn:needs-lock
@@ -28,7 +28,7 @@ svn:special svn:externals svn:needs-lock
 
 ManagerProvider.java
 file
-
+256
 
 
 
@@ -62,7 +62,7 @@ qinyingjie
 
 OrderStatisticProvider.java
 file
-
+256
 
 
 
@@ -96,7 +96,7 @@ liangshizhong
 
 PersonalCenterProvider.java
 file
-
+256
 
 
 
@@ -130,7 +130,7 @@ dingzhenxing
 
 ProductProvider.java
 file
-
+256
 
 
 
@@ -168,10 +168,10 @@ file
 
 
 
-2017-11-18T01:20:21.621000Z
-d21148b1d54b604b32d17f1b9da40418
-2017-11-17T03:54:09.871967Z
-227
+2017-11-19T07:52:15.379000Z
+894949f6d8f2e297b9d8014a567840ef
+2017-11-19T06:48:47.075583Z
+304
 chenshaohua
 
 
@@ -194,5 +194,5 @@ chenshaohua
 
 
 
-3874
+3936
 

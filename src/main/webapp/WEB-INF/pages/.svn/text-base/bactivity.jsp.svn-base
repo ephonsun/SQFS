@@ -57,7 +57,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<h3 class="panel-title">流程管理</h3>
 			</div>
 			<div class="panel-body" >
-				<form action="backStage/m/uploadProcessDocument" method="post" enctype="multipart/form-data" onsubmit="return confirm('是否确认添加')">
+				<form action="backStage/m/uploadProcessDocument" method="post" enctype="multipart/form-data" id="_submitProcessFile">
 				<table class="table table-bordered">
 					<thead>
 						<tr style="font-size: 12px;" align="center">
@@ -73,7 +73,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<td align="left"><input type="file" name="zipDocs"></td>
 						</tr>						
 						<tr id="dataTr_${stat.index}" align="center">
-							<td colspan="2"><input type="reset" value="取消">&nbsp;&nbsp;<input type="submit" value="提交"></td>
+							<td colspan="2"><input type="reset" value="取消">&nbsp;&nbsp;<input type="submit" value="提交" ></td>
 						</tr>
 				</table>
 				</form>
@@ -102,7 +102,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										<td >${dto.deploymentTime }</td>
 										<td >${dto.version }</td>
 										<td >
-											<a href="#" name="del_deployment">删除</a>&nbsp;&nbsp;&nbsp; 
+											<a href="javascript:void(0)" name="del_deployment">删除</a>&nbsp;&nbsp;&nbsp; 
 											<a target="_blank" href="<%=basePath %>backStage/m/v/${dto.id }">查看流程图</a>
 										</td>
 									</tr>
@@ -129,7 +129,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				   					首页
 				   				</c:when>
 				   				<c:otherwise>
-				   					<a href="#" id="first_page">首页</a>
+				   					<a href="javascript:void(0)" id="first_page">首页</a>
 				   				</c:otherwise>
 			   				</c:choose> 
 						</li>
@@ -139,7 +139,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									上一页
 								</c:when>  					 
 								<c:otherwise>     
-									  <a href="#" id="pre_page">上一页</a>
+									  <a href="javascript:void(0)" id="pre_page">上一页</a>
 								</c:otherwise> 
 							</c:choose>	
 						</li>
@@ -149,7 +149,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									下一页
 								</c:when>  					 
 								<c:otherwise>     
-									  <a href="#" id="next_page">下一页</a>
+									  <a href="javascript:void(0)" id="next_page">下一页</a>
 								</c:otherwise> 
 							</c:choose>
 						</li>
@@ -159,7 +159,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									尾页
 								</c:when>
 								<c:otherwise>
-									<a href="#" id="last_page">尾页</a>
+									<a href="javascript:void(0)" id="last_page">尾页</a>
 								</c:otherwise>
 							</c:choose> 
 						</li>
@@ -174,6 +174,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    	 				<input type="text" name="page" size="2" id="input_page">&nbsp;页
 						</c:otherwise>
 				    </c:choose>
+   	 				<input type="hidden" id="input_page_totle_hidden" value="${pdInfo.pages }">
 	    	 </div>   
 			</div>
 

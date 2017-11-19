@@ -122,7 +122,7 @@
     <div class="container">
         <div id="pf-hd">
            <div class="pf-logo">
-                <img  src="${ctx}/bpic/main_logo.png" alt="logo">
+                <img  src="${ctx}/bpic/logo.png" alt="logo">
            </div>
             
 

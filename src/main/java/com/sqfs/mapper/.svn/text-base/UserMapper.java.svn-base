@@ -20,7 +20,7 @@ public interface UserMapper {
 	 +"id_card,t_name ,birthDate ,sex,email,"
 	 +"education,hy_status,h_address,x_address,w_position,m_income,w_year,"
 	 +"jj_name,jj_name_phone,jj_name_rela,id_card_z,id_card_f,hukouben,jiehunzheng,work_info,"
-	 +"liushuizhang,zhengxin,shang_time  from sq_user where phone=#{phone} and d_pwd=#{d_pwd}")
+	 +"liushuizhang,zhengxin,shang_time ,user_checked  from sq_user where phone=#{phone} and d_pwd=#{d_pwd}")
 	SqUser login(SqUser sqUser);
 	
 	/**

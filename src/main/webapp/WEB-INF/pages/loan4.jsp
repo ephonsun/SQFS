@@ -20,6 +20,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link href="css/css.css" rel="stylesheet">
 <link href="favicon.ico" rel="SHORTCUT ICON">
 <script type="text/javascript" src="script/jquery.min.js"></script>
+<script type="text/javascript" src="js/user-check-1.0.1.js"></script>
   <script type="text/javascript" src="script/common.js"></script>
 <script src="script/ablumn.js"></script>
 <script src="script/plugins.js"></script>
@@ -95,8 +96,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="fn-left logo"> <a class="" href="index"> <img src="images/logo.png"  title=""> </a> </div>
       <ul class="top-nav fn-clear">
         <li class="on"> <a href="index">首页</a> </li>
-        <li> <a href="invest/investList" class="">我要投资</a> </li>
-        <li> <a href="trans/loan3/home" class="">我要贷款</a> </li>
+         <li> <a href="invest/investList" id="gotoInvest" >我要投资</a> </li>
+ <li> <a href="trans/loan5/home"  id="gotoLoanPage">我要贷款</a>
+ <input type="hidden" value="${sessionScope.info.user_checked } " id="user_check_info_flag"> </li>
         <li> <a href="帮助中心/home">安全保障</a> </li>
         <c:choose>
         	<c:when test="${sessionScope.info.user_id==null }">

@@ -20,10 +20,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link href="css/css.css" rel="stylesheet">
 <link href="favicon.ico" rel="SHORTCUT ICON">
 <script type="text/javascript" src="script/jquery.min.js"></script>
+<script type="text/javascript" src="js/loan-order-check.js"></script>
+<script type="text/javascript" src="js/user-check-1.0.1.js"></script>
+<!-- <script type="text/javascript" src="js/jquery-city.js"></script> -->
 <script type="text/javascript" src="script/common.js"></script>
 <script src="script/ablumn.js"></script>
 <script src="script/plugins.js"></script>
 <script src="script/detail.js"></script>
+<script type="text/javascript" src="<%=basePath%>bresources/My97DatePicker/WdatePicker.js"> </script>
 
 <!-- 新加入 -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -41,25 +45,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <link type="text/css" href="personage/select.css" rel="stylesheet">
 <link type="text/css" href="personage/common.css" rel="stylesheet">
-<script type="text/javascript" src="personage/hm.js"></script><script type="text/javascript" async="" src="personage/sensorsdata.min.js"></script><script src="personage/jquery.js"></script>
+<script type="text/javascript" src="personage/hm.js"></script>
+<script type="text/javascript" async="" src="personage/sensorsdata.min.js"></script>
+<script type="text/javascript"
+	src="bresources/easyUI/jquery.easyui.min.js"></script>
+<link rel="stylesheet" href="bresources/easyUI/easyui.css">
+<script type="text/javascript" src="bresources/blockUI/jquery.blockUI.js"></script>
+<!-- <script src="personage/jquery.js"></script> -->
 <script type="text/javascript" src="personage/form.js"></script>
 <script type="text/javascript" src="personage/modal.js"></script>
-<script type="text/javascript" src="personage/layer.js"></script><link type="text/css" rel="stylesheet" href="personage/layer.css" id="layuicss-skinlayercss">
+<script type="text/javascript" src="personage/layer.js"></script>
+<link type="text/css" rel="stylesheet" href="personage/layer.css" id="layuicss-skinlayercss">
 <link href="personage/jedate.css" rel="stylesheet">
 <script type="text/javascript" src="personage/jquery.jedate.js"></script>
-
-<!--  <link rel="stylesheet" type="text/css" href="css/main.css" />-->
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/jquery.cityselect.js"></script>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css" />
+ -->
+<!-- <script type="text/javascript" src="js/jquery.cityselect.js"></script> -->
 <script type="text/javascript">
 	$(function(){
-		var a=$("#id_card").val();
+		var a=$("#idcard").val();
 		if(a==null || a==""){
 			location.href="个人中心-开通第三方/home";
 		}
 		var b=$("#times").html();
 		var c=$("#birthDate").val(b);
 	})
+	
 </script>
 </head>
 <body>
@@ -102,8 +113,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="fn-left logo"> <a class="" href="index"> <img src="images/logo.png"  title=""> </a> </div>
       <ul class="top-nav fn-clear">
         <li class="on"> <a href="index">首页</a> </li>
-        <li> <a href="invest/investList" class="">我要投资</a> </li>
-        <li> <a href="trans/loan3/home" class="">我要贷款</a> </li>
+       <li> <a href="invest/investList" id="gotoInvest" >我要投资</a> </li>
+ <li> <a href="trans/loan5/home"  id="gotoLoanPage">我要贷款</a>
+ <input type="hidden" value="${sessionScope.info.user_checked } " id="user_check_info_flag"> </li>
         <li> <a href="帮助中心/home">安全保障</a> </li>
         <c:choose>
         	<c:when test="${sessionScope.info.user_id==null }">
@@ -119,34 +131,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </div>
 </header>
 
+<!-- S  -->
  <div class="b-main f-mt30">
     <div class="main-content">
+    <form action="loan/updateSqUser" method="POST" id="submitPersonalInfo">
         <h3 class="title">个体工商户基础信息</h3>
         <div class="title-2">
-            个人基础信息
+         	   个人基础信息
         </div>
-       
             <input type="hidden" name="ProjectTypeId" value="3">
             <div class="u-form">
                 <div class="rol">
                     <div class="col-50">
                         <div>
-                            <label>用户名</label> <input name="user_name" type="text" readonly="readonly" value="${info.user_name }">
+                            <label>用户名</label> <input name="username" type="text" readonly="readonly" value="${info.user_name }">
                         </div>
                         <p class="msgnav"></p>
                     </div>
                     <div class="col-50">
                         <div>
-                            <label>性别</label> <input name="sex" type="text" readonly="readonly" value="${info.sex }">
+                     		<label>真实姓名</label> <input id="tname" name="t_name" type="text" readonly="readonly" value="${info.t_name }">
+                     		<input type="hidden" value="${sessionScope.info.user_id }" id="user_id_info"/>
                         </div>
-                        <p class="msgnav"></p>
                     </div>
                 </div>
+                
                 <div class="rol">
-                    <div class="col-50">
+               		 <div class="col-50">
                         <div>
-                            <label>真实姓名</label> <input id="t_name" name="t_name" type="text" readonly="readonly" value="${info.t_name }">
+                            <label>证件号码</label> <input id="idcard" name="certif_id" type="text" readonly="readonly" value="${info.id_card }">
                         </div>
+                        <p class="msgnav"></p>
                     </div>
                     <div class="col-50">
                         <div>
@@ -155,17 +170,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <p class="msgnav"></p>
                     </div>
                 </div>
+          
                 <div class="rol">
-                    <div class="col-50">
+               		 <div class="col-50">
                         <div>
-                            <label>证件号码</label> <input id="id_card" name="certif_id" type="text" readonly="readonly" value="${info.id_card }">
+                            <label>出生日期</label>&nbsp;<input name="birthDate1" id="birthDate" type="text" readonly="readonly">   
                         </div>
                         <p class="msgnav"></p>
                     </div>
                     <div class="col-50">
+                       
                         <div>
-                        	<p hidden id="times"><fmt:formatDate value="${info.birthDate }" pattern="YYYY-MM-dd"/></p>   
-                            <label>出生日期</label><input name="birthDate" id="birthDate" readonly="readonly" type="text" value="">   
+                            <label>邮箱</label> <input name="email" id="email" type="text" value="${info.email }" readonly="readonly">
                         </div>
                         <p class="msgnav"></p>
                     </div>
@@ -173,13 +189,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <div class="rol">
                     <div class="col-50">
                         <div>
-                            <label>银行卡号</label> <input name="bank_card" id="bank_card"  type="text" value="${info.bank_card }">
+                            <label>银行卡号</label> <input name="bank_card" id="bank_card"  type="text" value="">
                         </div>
                         <p class="msgnav"></p>
                     </div>
                     <div class="col-50">
-                        <div>
-                            <label>邮箱</label> <input name="email" id="email" type="text" value="${info.email }">
+                         <div>
+  							 <label>性别</label>  <select name="sex"  id="sex" >
+                                <option value="男">男 </option>
+                                <option value="女">女</option>
+                            </select>
                         </div>
                         <p class="msgnav"></p>
                     </div>
@@ -194,8 +213,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="col-50">
                        <label>教育程度</label>
                             <select name="education"  id="education" >
-                            	<option value="${info.education }">${info.education }</option>
-                            	<option value="">请选择</option>
                                 <option value="初中">初中 </option>
                                 <option value="高中">高中</option>
                                 <option value="本科">本科</option>
@@ -205,22 +222,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <p class="msgnav"></p>
                     </div>
                 </div>
-                <div class="rol">
-                    <div class="col-50">
-                        
-                        <p class="msgnav"></p>
-                    </div>
-                    <div class="col-50">
-                        <div>
-                            
-                        </div>
-                        <p class="msgnav"></p>
-                    </div>
-                </div>
             </div>
-            
-            
-          <form action="loan/updateSqUser" method="POST" enctype="multipart/form-data">
+<!-- E  -->            
           <input type="hidden" name="user_id" value="${info.user_id }">
             <div class="title-2">家庭情况</div>
             <div class="u-form">
@@ -229,8 +232,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                        <div>
 			                    <label>婚姻状况</label>
 			                    <select name="hy_status" id="hy_status"  >
-			                    	<option value="${info.hy_status }" selected="selected">${info.hy_status }</option>
-			                    	<option value="">请选择</option>
 			                        <option value="已婚">已婚</option>
 			                        <option value="单身">单身</option>
 			                        <option value="离异">离异</option>
@@ -249,7 +250,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			                    
                 </div>
                 
-            <div class="rol">
+             <div class="rol">
 	                    <div class="col-50">
 	                        <div>
 			                    <label>紧急联系人电话</label>
@@ -283,59 +284,40 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            </div>
                 <div class="more-select" id="city">
                     <label>户籍所在地</label>
-                     <select id="hu_pro_id" name="h_address" class="prov" onchange="getcity(&#39;hu_pro_id&#39;,&#39;hu_city_id&#39;)">
-                   		 <option value="">请选择</option>
-                    </select>
-                    <select id="hu_city_id" name="HU_city_id" class="city" disabled="disabled" onchange="getdist(&#39;hu_city_id&#39;,&#39;hu_dist_id&#39;)">
-                    	 <option value="">请选择</option>
-                    </select>
-                    <select id="hu_dist_id" name="HU_dist_id" class="dist" disabled="disabled">
-                    	<option value="">请选择</option>
-                    </select>
+                    <select class="select" name="province1" id="s1">
+                    <option value="请选择省">请选择省</option><option value="北京市">北京市</option><option value="天津市">天津市</option><option value="上海市">上海市</option><option value="重庆市">重庆市</option><option value="河北省">河北省</option><option value="山西省">山西省</option><option value="内蒙古">内蒙古</option><option value="辽宁省">辽宁省</option><option value="吉林省">吉林省</option><option value="黑龙江省">黑龙江省</option><option value="江苏省">江苏省</option><option value="浙江省">浙江省</option><option value="安徽省">安徽省</option><option value="福建省">福建省</option><option value="江西省">江西省</option><option value="山东省">山东省</option><option value="河南省">河南省</option><option value="湖北省">湖北省</option><option value="湖南省">湖南省</option><option value="广东省">广东省</option><option value="广西">广西</option><option value="海南省">海南省</option><option value="四川省">四川省</option><option value="贵州省">贵州省</option><option value="云南省">云南省</option><option value="西藏">西藏</option><option value="陕西省">陕西省</option><option value="甘肃省">甘肃省</option><option value="青海省">青海省</option><option value="宁夏">宁夏</option><option value="新疆">新疆</option><option value="香港">香港</option><option value="澳门">澳门</option><option value="台湾省">台湾省</option></select>
+                    <select class="select" name="city1" id="s2">
+					<option value="请选择市">请选择市</option><option value="西安市" selected="selected">西安市</option><option value="延安市">延安市</option><option value="铜川市">铜川市</option><option value="渭南市">渭南市</option><option value="咸阳市">咸阳市</option><option value="宝鸡市">宝鸡市</option><option value="汉中市">汉中市</option><option value="榆林市">榆林市</option><option value="安康市">安康市</option><option value="商洛市">商洛市</option></select>
+					<select class="select" name="town1" id="s3">
+					<option value="请选择区/县">请选择区/县</option><option value="莲湖区">莲湖区</option><option value="新城区">新城区</option><option value="碑林区">碑林区</option><option value="灞桥区">灞桥区</option><option value="未央区">未央区</option><option value="雁塔区">雁塔区</option><option value="阎良区">阎良区</option><option value="临潼区">临潼区</option><option value="长安区">长安区</option><option value="蓝田县">蓝田县</option><option value="蓝关镇">蓝关镇</option><option value="周至县" selected="selected">周至县</option><option value="二曲镇">二曲镇</option><option value="户县">户县</option><option value="甘亭镇">甘亭镇</option><option value="高陵县">高陵县</option><option value="鹿苑镇">鹿苑镇</option></select>
                 </div>
                 <p class="msgnav"></p>
                 <div class="more-select" id="city1">
                     <label>当前居住地址</label>
-
-                    <select id="ju_pro_id" name="x_address" class="prov" onchange="getcity(&#39;ju_pro_id&#39;,&#39;ju_city_id&#39;)">
-                        <option value="">请选择</option>
-                    </select>
-
-                    <select id="ju_city_id" name="JU_city_id" class="city" disabled="disabled" onchange="getdist(&#39;ju_city_id&#39;,&#39;ju_dist_id&#39;)">
-                        <option value="">请选择</option>
-                    </select>
-
-                    <select id="ju_dist_id" name="JU_dist_id" class="dist" disabled="disabled">
-                        <option value="">请选择</option>
-                    </select>
+						<select class="select" name="province" id="s1">
+                    <option value="请选择省">请选择省</option><option value="北京市">北京市</option><option value="天津市">天津市</option><option value="上海市">上海市</option><option value="重庆市">重庆市</option><option value="河北省">河北省</option><option value="山西省">山西省</option><option value="内蒙古">内蒙古</option><option value="辽宁省">辽宁省</option><option value="吉林省">吉林省</option><option value="黑龙江省">黑龙江省</option><option value="江苏省">江苏省</option><option value="浙江省">浙江省</option><option value="安徽省">安徽省</option><option value="福建省">福建省</option><option value="江西省">江西省</option><option value="山东省">山东省</option><option value="河南省">河南省</option><option value="湖北省">湖北省</option><option value="湖南省">湖南省</option><option value="广东省">广东省</option><option value="广西">广西</option><option value="海南省">海南省</option><option value="四川省">四川省</option><option value="贵州省">贵州省</option><option value="云南省">云南省</option><option value="西藏">西藏</option><option value="陕西省">陕西省</option><option value="甘肃省">甘肃省</option><option value="青海省">青海省</option><option value="宁夏">宁夏</option><option value="新疆">新疆</option><option value="香港">香港</option><option value="澳门">澳门</option><option value="台湾省">台湾省</option></select>
+                    <select class="select" name="city" id="s2">
+					<option value="请选择市">请选择市</option><option value="西安市" selected="selected">西安市</option><option value="延安市">延安市</option><option value="铜川市">铜川市</option><option value="渭南市">渭南市</option><option value="咸阳市">咸阳市</option><option value="宝鸡市">宝鸡市</option><option value="汉中市">汉中市</option><option value="榆林市">榆林市</option><option value="安康市">安康市</option><option value="商洛市">商洛市</option></select>
+					<select class="select" name="town" id="s3">
+					<option value="请选择区/县">请选择区/县</option><option value="莲湖区">莲湖区</option><option value="新城区">新城区</option><option value="碑林区">碑林区</option><option value="灞桥区">灞桥区</option><option value="未央区">未央区</option><option value="雁塔区">雁塔区</option><option value="阎良区">阎良区</option><option value="临潼区">临潼区</option><option value="长安区">长安区</option><option value="蓝田县">蓝田县</option><option value="蓝关镇">蓝关镇</option><option value="周至县" selected="selected">周至县</option><option value="二曲镇">二曲镇</option><option value="户县">户县</option><option value="甘亭镇">甘亭镇</option><option value="高陵县">高陵县</option><option value="鹿苑镇">鹿苑镇</option></select>
                 </div>
                 <p class="msgnav"></p>
             </div>
             <div class="u-btn btn-center">
-                <input type="submit" id="but" value="下一步">
+                <input type="submit" id="but" value="提交">
             </div>
         </form>
     </div>
 </div>              
+<!-- <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script> -->
+<script type="text/javascript" src="js/address.js" charset="utf-8"></script>
 <script type="text/javascript">
-	$(function(){
-		$("#city").citySelect({
-			nodata:"none",
-			required:false
-		}); 
-	});
-	$(function(){
-		$("#city1").citySelect({
-			nodata:"none",
-			required:false
-		}); 
-		
-		
-		
-	});
-	
-	
-</script>     
+$(function(){
+	$.initialize({
+   });
+});
+</script>
+   
         
 <!--网站底部-->
 <div id="footer" class="ft">

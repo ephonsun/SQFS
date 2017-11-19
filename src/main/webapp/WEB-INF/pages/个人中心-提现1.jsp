@@ -18,6 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="css/user.css" />
 <link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
 <script type="text/javascript" src="script/jquery.min.js"></script>
+<script type="text/javascript" src="js/user-check-1.0.1.js"></script>
 <script type="text/javascript" src="script/common.js"></script>
 <script src="script/user.js" type="text/javascript"></script>
 </head>
@@ -60,8 +61,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="fn-left logo"> <a class="" href="index"> <img src="images/logo.png"  title=""> </a> </div>
       <ul class="top-nav fn-clear">
         <li class="on"> <a href="index">首页</a> </li>
-        <li> <a href="invest/investList" class="">我要投资</a> </li>
-        <li> <a href="trans/loan3/home" class="">我要贷款</a> </li>
+        <li> <a href="invest/investList" id="gotoInvest" >我要投资</a> </li>
+ <li> <a href="trans/loan5/home"  id="gotoLoanPage">我要贷款</a>
+ <input type="hidden" value="${sessionScope.info.user_checked } " id="user_check_info_flag"> </li>
         <li> <a href="帮助中心/home">安全保障</a> </li>
         <c:choose>
         	<c:when test="${sessionScope.info.user_id==null }">
@@ -198,7 +200,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div class="personal-main">
       <div class="personal-deposit">
         <h3><i>提现</i></h3>
-        <form id="form" name="form" method="post" action="trans/PersonalCenter/Withdraw/${sqUser.user_id }/1" enctype="application/x-www-form-urlencoded" target="_blank">
+        <form id="form" name="form" method="post" action="trans/PersonalCenter/Withdraw/${sqUser.user_id }/1" enctype="application/x-www-form-urlencoded">
           <input type="hidden" name="form" value="form">
           <div class="deposit-form" style="margin-top:0px;border-top:0px none;">
             <h6>填写提现金额</h6>
@@ -208,13 +210,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               	<span class="deposit-formright"> 
               	<i><label id="form:blance" class="blance">
               		<c:choose>
-              			<c:when test="${sqUser.account_balance !=null and sqUser.account_balance !='' } ">
-              				${sqUser.account_balance }
-              			</c:when>
-              			<c:otherwise>
-              				0.00
-              			</c:otherwise>
-              		</c:choose>
+		        	<c:when test="${sqUser.account_balance !=null and sqUser.account_balance !='' }">
+						${sqUser.account_balance }
+		        	</c:when>
+		        	<c:otherwise>
+		        		0.00
+		        	</c:otherwise>
+		        </c:choose>
               	</label></i>元 
                 </span> 
               </li>
@@ -244,14 +246,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <span class="dzicon-show"></span> 
               </li>
               <li>
-              	<c:choose>
-            		<c:when test="${sqUser.account_balance !=null and sqUser.account_balance !='' } ">
-            			<input type="submit" name="form:j_idt78" value="提现" class="btn-depositok" onclick="return checkActualMoney()">
-            		</c:when>
-            		<c:otherwise>
-            			<input type="button" value="余额不足" style="background-color: #A0A0A0;" class="btn-depositok" disabled="disabled" >
-            		</c:otherwise>
-            	</c:choose>
+             	<c:choose>
+		        	<c:when test="${sqUser.account_balance !=null and sqUser.account_balance !='' }">
+						<input type="submit" name="form:j_idt78" value="提现" class="btn-depositok" onclick="return checkActualMoney()">
+		        	</c:when>
+		        	<c:otherwise>
+						<input type="button" value="余额不足" style="background-color: #A0A0A0;" class="btn-depositok" disabled="disabled" >
+		        	</c:otherwise>
+		        </c:choose>
               </li>
             </ul>
           </div>
@@ -283,11 +285,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					var legalFlag3=legalPattern.test(actualMoney);
 					if(!legalFlag3)
 					{
-						$(actualMessage).text("小数位最多两位!");
+						$(actualMessage).text("输入的金额不正确!");
 						$(actualMessage).show();
 					}
 					else
-					{
+					{   
+						var balance = $("#form\\:blance").text();
+						actualMoney = actualMoney * 1;
+						balance = balance * 1;
+						if(actualMoney > balance) {
+							$(actualMessage).text("提现金额不能超过账户余额");
+							$(actualMessage).show();
+							return;
+						}
 						$(actualMessage).hide();
 						var legalFlag1=actualMoney>2;
 						var legalFlag2=actualMoney<=500000;

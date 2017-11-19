@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,7 @@ import com.sqfs.utils.RandomNumUtil;
 *
 */
 @Controller
+@Scope("prototype")
 @RequestMapping("/trans/PersonalCenter")
 public class PersonalCenterController {
 	
@@ -95,7 +97,7 @@ public class PersonalCenterController {
 	 *
 	 */
 	@RequestMapping("/getMoneyRecord/{user_id}")
-	public ModelAndView getMoneyRecord(ModelAndView modelAndView,
+	public ModelAndView getMoneyRecord(HttpSession session,ModelAndView modelAndView,
 										@PathVariable("user_id") String user_id,
 										String trade_type,String trade_date,String page){
 		int currentPage = 0;
@@ -106,13 +108,17 @@ public class PersonalCenterController {
 			modelAndView.addObject("currentPage", 1);
 		}
 		SqUser sqUser = personalCenterService.getMoneyRecordTypeAndDate(user_id,trade_type,trade_date, currentPage);
-		sqUser.setTrade_type(trade_type);
-		sqUser.setTrade_date(trade_date);
-		modelAndView.addObject("sqUser", sqUser);
-		modelAndView.addObject("currentPage", PersonalCenterPageUtil.currentPage);
-		modelAndView.addObject("totalPage", PersonalCenterPageUtil.totalPage);
-		
-		modelAndView.setViewName("个人中心-资金记录 ");
+		if(sqUser !=null){
+			session.setAttribute("info", sqUser);
+			sqUser.setTrade_type(trade_type);
+			sqUser.setTrade_date(trade_date);
+			modelAndView.addObject("sqUser", sqUser);
+			modelAndView.addObject("currentPage", PersonalCenterPageUtil.currentPage);
+			modelAndView.addObject("totalPage", PersonalCenterPageUtil.totalPage);
+			modelAndView.setViewName("个人中心-资金记录 ");
+		}else{
+			modelAndView.setViewName("error");
+		}
 		return modelAndView;
 	}
 	/**
@@ -123,11 +129,16 @@ public class PersonalCenterController {
 	 *
 	 */
 	@RequestMapping("/getDepositsHistory/{user_id}")
-	public ModelAndView getInvestByUserId(ModelAndView modelAndView,@PathVariable("user_id") String user_id){
+	public ModelAndView getInvestByUserId(HttpSession session,ModelAndView modelAndView,@PathVariable("user_id") String user_id){
 		SqUser sqUser = personalCenterService.getInvestByUserId(user_id);
-		sqUser.setUser_id(user_id);
-		modelAndView.addObject("sqUser", sqUser);
-		modelAndView.setViewName("个人中心-投资记录");
+		if(sqUser != null){
+			session.setAttribute("info", sqUser);
+			sqUser.setUser_id(user_id);
+			modelAndView.addObject("sqUser", sqUser);
+			modelAndView.setViewName("个人中心-投资记录");
+		}else{
+			modelAndView.setViewName("error");
+		}
 		return modelAndView;
 	}
 	
@@ -139,12 +150,18 @@ public class PersonalCenterController {
 	 *
 	 */
 	@RequestMapping("/getReturnedMoneyPlan/{user_id}")
-	public ModelAndView getInvestsIngByUserId(ModelAndView modelAndView,@PathVariable("user_id") String user_id){
+	public ModelAndView getInvestsIngByUserId(HttpSession session,ModelAndView modelAndView,@PathVariable("user_id") String user_id){
 		SqUser sqUser = personalCenterService.getInvestsIngByUserId(user_id);
-		 
-		sqUser.setUser_id(user_id);
-		modelAndView.addObject("sqUser", sqUser);
-		modelAndView.setViewName("个人中心-回款计划");
+		
+		if(sqUser != null){
+			session.setAttribute("info", sqUser);
+			sqUser.setUser_id(user_id);
+			modelAndView.addObject("sqUser", sqUser);
+			modelAndView.setViewName("个人中心-回款计划");
+		}else{
+			modelAndView.setViewName("error");
+		}
+		
 		return modelAndView;
 	}
 	/**
@@ -154,9 +171,10 @@ public class PersonalCenterController {
 	 * @return
 	 */
 	@RequestMapping("/OpenThirdParty/{user_id}")
-	public ModelAndView openThirdParty(ModelAndView modelAndView,@PathVariable("user_id")String user_id){
+	public ModelAndView openThirdParty(HttpSession session, ModelAndView modelAndView,@PathVariable("user_id")String user_id){
 		SqUser sqUser = personalCenterService.getSqUser(user_id);
 		if(sqUser != null){
+			session.setAttribute("info", sqUser);
 			if(sqUser.getEmail() != null && !"".equals(sqUser.getEmail()) ){//邮箱是否绑定
 				sqUser.setEmail(sqUser.getEmail().replaceAll("(\\w?)(\\w+)(\\w)(@\\w+\\.[a-z]+(\\.[a-z]+)?)", "$1****$3$4"));
 				modelAndView.setViewName("个人中心-开通第三方1");
@@ -165,6 +183,8 @@ public class PersonalCenterController {
 			}
 			sqUser.setPhone(sqUser.getPhone().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
 			modelAndView.addObject("sqUser", sqUser);
+		}else{
+			modelAndView.setViewName("error");
 		}
 		return modelAndView;
 	}
@@ -180,7 +200,8 @@ public class PersonalCenterController {
 	 * @return
 	 */
 	@RequestMapping("/PersonalCenterEmail/{user_id}/{status}/{validateCode}")
-	public ModelAndView PersonalCenterEmailControl( String email,
+	public ModelAndView PersonalCenterEmailControl( HttpSession session,
+													String email,
 													@PathVariable("user_id")String user_id,
 													@PathVariable("status")String status,
 													@PathVariable("validateCode")String validateCode){
@@ -200,10 +221,15 @@ public class PersonalCenterController {
 					boolean b = personalCenterService.addEmail(user_id, email);
 					if(b){
 						SqUser sqUser = personalCenterService.getSqUser(user_id);
-						sqUser.setEmail(sqUser.getEmail().replaceAll("(\\w?)(\\w+)(\\w)(@\\w+\\.[a-z]+(\\.[a-z]+)?)", "$1****$3$4"));
-						sqUser.setPhone(sqUser.getPhone().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
-						modelAndView.addObject("sqUser", sqUser);
-						modelAndView.setViewName("个人中心-开通第三方1");
+						if(sqUser != null){
+							session.setAttribute("info", sqUser);
+							sqUser.setEmail(sqUser.getEmail().replaceAll("(\\w?)(\\w+)(\\w)(@\\w+\\.[a-z]+(\\.[a-z]+)?)", "$1****$3$4"));
+							sqUser.setPhone(sqUser.getPhone().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
+							modelAndView.addObject("sqUser", sqUser);
+							modelAndView.setViewName("个人中心-开通第三方1");
+						}else{
+							modelAndView.setViewName("error");
+						}
 					}else{
 						modelAndView.setViewName("error");
 					}
@@ -223,10 +249,10 @@ public class PersonalCenterController {
 	 * @return
 	 */
 	@RequestMapping("/addIDCard/{user_id}")
-	public ModelAndView addIDCard(ModelAndView modelAndView,@PathVariable("user_id")String user_id,String t_name,String id_card ){
+	public ModelAndView addIDCard(HttpSession session, ModelAndView modelAndView,@PathVariable("user_id")String user_id,String t_name,String id_card ){
 		boolean b = personalCenterService.addIDCard(user_id, t_name, id_card);
 		if(b){
-			modelAndView.setViewName("forward:/trans/PersonalCenter/getPensonalInformation/"+user_id);
+			modelAndView.setViewName("redirect:/trans/PersonalCenter/getPensonalInformation/"+user_id);
 		}else{
 			modelAndView.setViewName("error");
 		}
@@ -241,7 +267,7 @@ public class PersonalCenterController {
 	 * @return
 	 */
 	@RequestMapping("/Recharge/{user_id}/{recharge}")
-	public ModelAndView Recharge(ModelAndView modelAndView,String bankCard,BigDecimal money,@PathVariable("user_id")String user_id,@PathVariable("recharge")String recharge){
+	public ModelAndView Recharge(HttpSession session, ModelAndView modelAndView,String bankCard,BigDecimal money,@PathVariable("user_id")String user_id,@PathVariable("recharge")String recharge){
 		SqUser sqUser = personalCenterService.getSqUser(user_id);
 		//用户是否为空
 		if(sqUser != null ){
@@ -251,20 +277,17 @@ public class PersonalCenterController {
 					&& sqUser.getT_name() !=null && !sqUser.getT_name().equals("")){
 				if("1".equals(recharge)){//进行充值
 					boolean flage = false;
-					if(sqUser.getAccount_balance() !=null){
-						flage = personalCenterService.Recharge(bankCard, money, user_id,"1");
-					}else{
-						flage = personalCenterService.Recharge(bankCard, money, user_id,"2");
-					}
-					
+					money = money.add(sqUser.getAccount_balance());
+					flage = personalCenterService.Recharge(bankCard, money, user_id,"1");
 					//是否充值成功
 					if(flage){
 						//重新返回到跳转页面
-						modelAndView.setViewName("forward:/trans/PersonalCenter/Recharge/"+user_id+"/2");
+						modelAndView.setViewName("redirect:/trans/PersonalCenter/Recharge/"+user_id+"/2");
 					}else{//未充值成功
 						modelAndView.setViewName("error");
 					}
 				}else if("2".equals(recharge)){//充值成功或准备充值页面
+					session.setAttribute("info", sqUser);
 					modelAndView.addObject("sqUser", sqUser);
 					modelAndView.setViewName("个人中心-充值1");
 				}else{
@@ -285,7 +308,7 @@ public class PersonalCenterController {
 	 * @return
 	 */
 	@RequestMapping("/Withdraw/{user_id}/{withdraw}")
-	public ModelAndView withdraw(ModelAndView modelAndView,@PathVariable("user_id")String user_id,@PathVariable("withdraw")String withdraw,String bankCard,BigDecimal money){
+	public ModelAndView withdraw(HttpSession session, ModelAndView modelAndView,@PathVariable("user_id")String user_id,@PathVariable("withdraw")String withdraw,String bankCard,BigDecimal money){
 		SqUser sqUser = personalCenterService.getSqUser(user_id);
 		if(sqUser != null){
 			//是否已注册第三方
@@ -297,12 +320,13 @@ public class PersonalCenterController {
 					boolean flage = personalCenterService.Withdraw(bankCard, money, user_id);
 					//是否提现成功
 					if(flage){
-						//重新返回到跳转页面
-						modelAndView.setViewName("forward:/trans/PersonalCenter/Withdraw/"+user_id+"/2");
+						//重新返回到跳转页面     forward:/trans/PersonalCenter/getDepositsHistory/"+user_id
+						modelAndView.setViewName("redirect:/trans/PersonalCenter/Withdraw/"+user_id+"/2");
 					}else{//未提现成功
 						modelAndView.setViewName("error");
 					}
 				}else if("2".equals(withdraw)){//提现成功或准备提现页面
+					session.setAttribute("info", sqUser);
 					modelAndView.addObject("sqUser", sqUser);
 					modelAndView.setViewName("个人中心-提现1");
 				}else{
@@ -322,11 +346,11 @@ public class PersonalCenterController {
 	 * @param tz_dd_id
 	 */
 	@RequestMapping("/deleteInvest/{user_id}/{tz_dd_id}")
-	public ModelAndView deleteInvest(@PathVariable("user_id")String user_id,@PathVariable("tz_dd_id")String tz_dd_id){
+	public ModelAndView deleteInvest(HttpSession session, @PathVariable("user_id")String user_id,@PathVariable("tz_dd_id")String tz_dd_id){
 		ModelAndView modelAndView = new ModelAndView();
 		boolean b = personalCenterService.deleteInvest(tz_dd_id);
 		if(b){
-			modelAndView.setViewName("forward:/trans/PersonalCenter/getDepositsHistory/"+user_id);
+			modelAndView.setViewName("redirect:/trans/PersonalCenter/getDepositsHistory/"+user_id);
 		}else{
 			modelAndView.setViewName("error");
 		}
@@ -339,16 +363,19 @@ public class PersonalCenterController {
 	 * @return
 	 */
 	@RequestMapping("/accountSetting/{user_id}")
-	public ModelAndView accountSetting(ModelAndView modelAndView,@PathVariable("user_id")String user_id){
+	public ModelAndView accountSetting(HttpSession session, ModelAndView modelAndView,@PathVariable("user_id")String user_id){
 		SqUser sqUser = personalCenterService.getSqUser(user_id);
+		if(sqUser != null){
 		/*if(!sqUser.getEmail().equals("")){
 			sqUser.setEmail(sqUser.getEmail().replaceAll("(\\w?)(\\w+)(\\w)(@\\w+\\.[a-z]+(\\.[a-z]+)?)", "$1****$3$4"));
 		}
 		if(!sqUser.getPhone().equals("")){
 			sqUser.setPhone(sqUser.getPhone().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
 		}*/
-		modelAndView.addObject("sqUser", sqUser);
-		modelAndView.setViewName("个人中心-账户设置");
+			session.setAttribute("info", sqUser);
+			modelAndView.addObject("sqUser", sqUser);
+			modelAndView.setViewName("个人中心-账户设置");
+		}
 		return modelAndView;
 	}
 	
@@ -380,7 +407,7 @@ public class PersonalCenterController {
 	    Map<String, String> paramMap = new HashMap<String, String>();
 	    paramMap.put("phoneNumber", phoneNumber);
 	    paramMap.put("msgSign", "SQ金服");
-	    paramMap.put("templateCode", "SMS_111785140");
+	    paramMap.put("templateCode", "SMS_111785448");
 	    paramMap.put("jsonContent", jsonContent);
 	    //发送短信验证
 	    SendSmsResponse sendSmsResponse = AliyunMessageUtil.sendSms(paramMap);
@@ -398,7 +425,7 @@ public class PersonalCenterController {
 	public ModelAndView updatePhone(ModelAndView modelAndView,@PathVariable("user_id")String user_id,String phone){
 		boolean b = personalCenterService.updatePhone(user_id, phone);
 		if(b){
-			modelAndView.setViewName("forward:/trans/PersonalCenter/accountSetting/"+user_id);
+			modelAndView.setViewName("redirect:/trans/PersonalCenter/accountSetting/"+user_id);
 		}else{
 			modelAndView.setViewName("error");
 		}

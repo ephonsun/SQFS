@@ -116,7 +116,7 @@ public class ProductServiceImpl implements ProductService {
 			RedisRepository.setInfo(listLoans,b,true,jedis);
 			list2=(List<Loan>) RedisRepository.getInfo(b,jedis);
 		}
-		return productMapper.queryProList(loan);
+		return list2;
 	}
 
 	/**

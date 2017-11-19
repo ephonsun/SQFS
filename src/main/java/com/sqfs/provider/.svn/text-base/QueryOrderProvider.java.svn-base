@@ -1,8 +1,9 @@
 package com.sqfs.provider;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+
 import com.sqfs.beans.LikeResearch;
 
 
@@ -24,8 +25,8 @@ public class QueryOrderProvider {
 						+ "ld.loan_name,ld.loan_date,"
 						+ "ld.hk_type,ld.loan_use,ld.sh_level,"
 						+ "ld.dd_state,ld.sp_time1,ld.sp_time2,ld.g_id,ld.g_id2,"
-						+ "ld.remark1,ld.remark2,ld.release_date,ld.commencement_date from loan_dd ld,sq_user sq "
-						+ "where ld.user_id=sq.user_id and ld.loan_dd_id  in (");
+						+ "ld.remark1,ld.remark2,ld.release_date,ld.commencement_date from loan_dd ld left join sq_user sq on ld.user_id=sq.user_id "
+						+ "where ld.loan_dd_id  in (");
 				
 				for(int i=0;i<list.size();i++){
 					sql.append("'");
@@ -51,9 +52,10 @@ public class QueryOrderProvider {
                 }
                 if(likeResearch.getLikeorderid()!=null&&!"".equals(likeResearch.getLikeorderid()))
                 {
-                	sql.append(" and ld.loan_dd_id like concat(concat('%',#{likeResearch.likeorderid}),'%')");
+                	sql.append(" and sq.t_name like concat(concat('%',#{likeResearch.likeorderid}),'%')");
                 }
-				sql.append(" limit "+orderInfo.get("startSize")+","+orderInfo.get("pageSize"));	
+				sql.append(" order by  ld.loan_date ");
+                sql.append(" limit "+orderInfo.get("startSize")+","+orderInfo.get("pageSize"));	
 				
 				return sql.toString();	
 	}
@@ -64,8 +66,8 @@ public class QueryOrderProvider {
 		@SuppressWarnings("unchecked")
 		final List<String> list=(List<String>) orderInfo.get("orders");
 		StringBuffer sql=new StringBuffer();
-		sql.append("select count(1) from loan_dd ld "
-						+ "where loan_dd_id  in (");
+		sql.append("select count(1) from loan_dd ld , sq_user sq "
+						+ "where ld.loan_dd_id=sq.t_name and  ld.loan_dd_id  in (");
 				
 				for(int i=0;i<list.size();i++){
 					sql.append("'");
@@ -91,7 +93,7 @@ public class QueryOrderProvider {
                 }
                 if(likeResearch.getLikeorderid()!=null&&!"".equals(likeResearch.getLikeorderid()))
                 {
-                	sql.append(" and ld.loan_dd_id like concat(concat('%',#{likeResearch.likeorderid}),'%') ");
+                	sql.append(" and sq.t_name like concat(concat('%',#{likeResearch.likeorderid}),'%') ");
                 }				
 				return sql.toString();	
 	}		

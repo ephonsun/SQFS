@@ -1,7 +1,7 @@
 10
 
 dir
-256
+306
 svn://192.168.188.33/sqfs
 svn://192.168.188.33
 
@@ -23,12 +23,12 @@ svn:special svn:externals svn:needs-lock
 
 
 
-
+incomplete
 9017c111-c503-884a-9b0d-c8cc34febbd3
 
 .classpath
 file
-
+256
 
 
 
@@ -62,7 +62,7 @@ liangshizhong
 
 .gitignore
 file
-
+256
 
 
 
@@ -99,7 +99,7 @@ dir
 
 .project
 file
-
+256
 
 
 
@@ -136,7 +136,7 @@ dir
 
 .springBeans
 file
-
+256
 
 
 
@@ -173,7 +173,7 @@ dir
 
 pom.xml
 file
-
+256
 
 
 

@@ -4,11 +4,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.sqfs.beans.Loan;
 import com.sqfs.beans.SqUser;
 import com.sqfs.beans.ZcInfo;
@@ -28,6 +33,7 @@ import com.sqfs.utils.UuidUtil;
 
 
 @Controller
+@Scope("prototype")
 @RequestMapping("/loan")
 @Slf4j
 public class LoanInfoController {
@@ -45,21 +51,33 @@ public class LoanInfoController {
 	 * @exception 
 	 */
 	@RequestMapping("updateSqUser")
-	public ModelAndView updateSqUser(SqUser sqUser,ModelAndView mv,String h_address,String HU_city_id
-			,String HU_dist_id ,String x_address,String JU_city_id,String JU_dist_id){
-		
+	public ModelAndView updateSqUser(SqUser sqUser,String birthDate1,ModelAndView mv,String province1,String city1
+			,String town1 ,String province,String city,String town){
+				//对日期进行转化(字符串转日期)
+			log.info("squser+++++"+sqUser);
+				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟  
+				java.util.Date birthDate=null;
+				try {
+					birthDate = sdf.parse(birthDate1);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}  
+				sqUser.setBirthDate(birthDate);
 		String uuid =UuidUtil.getUuid();
-		h_address=h_address + HU_city_id;
-		h_address=h_address+HU_dist_id;
-		sqUser.setH_address(h_address);//拼接户籍所在地
-		
-		x_address=x_address+JU_city_id;
-		x_address=x_address+JU_dist_id;
-		sqUser.setX_address(x_address);
+		province1=province1 + city1;
+		province1=province1+town1;
+		sqUser.setH_address(province1);//拼接户籍所在地
+		province=province+city;
+		province=province+town;
+		sqUser.setX_address(province);
+		sqUser.setUser_checked(1);
 		//修改squser
 		int a=loanInfoService.updateSqUser(sqUser);
+		
 		if(a>0){
-			mv.setViewName("loan5");
+			//更新session
+			SqfsSessionContext.push("info", sqUser);
+			mv.setViewName("redirect:/trans/PersonalCenter/getPensonalInformation/" + sqUser.getUser_id());
 		}else {
 			mv.addObject("error", "修改失败");
 			mv.setViewName("loan3");
@@ -115,7 +133,6 @@ public class LoanInfoController {
 		loan.setTran_id(UuidUtil.getUuid());
 		//生成资产表的主键
 		loan.setZc_id(UuidUtil.getUuid());
-		log.info("loan2222=============="+loan);
 		//添加loan订单
 		int	flag=loanInfoService.addLoanProduct(loan);
 		 if (flag>0) {

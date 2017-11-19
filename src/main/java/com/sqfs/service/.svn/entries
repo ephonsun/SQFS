@@ -1,15 +1,15 @@
 10
 
 dir
-256
+306
 svn://192.168.188.33/sqfs/src/main/java/com/sqfs/service
 svn://192.168.188.33
 
 
 
-2017-11-18T01:03:26.776652Z
-252
-zengweilin
+2017-11-19T06:14:13.665990Z
+297
+qinyingjie
 
 
 svn:special svn:externals svn:needs-lock
@@ -28,7 +28,7 @@ svn:special svn:externals svn:needs-lock
 
 CheckOrderService.java
 file
-
+256
 
 
 
@@ -62,7 +62,7 @@ chenshaohua
 
 LoanInfoService.java
 file
-
+256
 
 
 
@@ -96,7 +96,7 @@ qinyingjie
 
 ManagerService.java
 file
-
+256
 
 
 
@@ -130,7 +130,7 @@ zengweilin
 
 OrderHandlerService.java
 file
-
+256
 
 
 
@@ -164,7 +164,7 @@ chenshaohua
 
 OrderStatisticService.java
 file
-
+256
 
 
 
@@ -198,7 +198,7 @@ liangshizhong
 
 PersonalCenterEmailService.java
 file
-
+256
 
 
 
@@ -232,7 +232,7 @@ dingzhenxing
 
 PersonalCenterService.java
 file
-
+256
 
 
 
@@ -266,7 +266,7 @@ dingzhenxing
 
 ProductService.java
 file
-
+256
 
 
 
@@ -300,7 +300,7 @@ qinyingjie
 
 UserService.java
 file
-
+256
 
 
 

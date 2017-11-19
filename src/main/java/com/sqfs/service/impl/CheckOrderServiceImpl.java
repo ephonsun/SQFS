@@ -198,7 +198,12 @@ public class CheckOrderServiceImpl implements CheckOrderService {
 			orderInfo.put("pageSize", pageSize);
 			//查询符合分页条件的订单集合
 			loans=managerMapper.getLoansByloan_dd(orderInfo);
-		}else{
+		}else{				
+			
+			unviewOrders.put("totalSize", 0);
+			unviewOrders.put("totalPage", 0);
+			unviewOrders.put("currentPage",0);
+			SqfsSessionContext.push("unviewOrders", unviewOrders);						
 			return null;
 	}				
 		return loans;
@@ -348,6 +353,7 @@ public class CheckOrderServiceImpl implements CheckOrderService {
 			map.put("count", 0L);
 			map.put("pages", 0L);
 			map.put("currentPage", 0L);
+			SqfsSessionContext.push("pdInfo", map);
 			return map;
 		}
 		
@@ -370,9 +376,9 @@ public class CheckOrderServiceImpl implements CheckOrderService {
 		long pages = 1L;
 		if(count > maxResults) {
 			if(count % maxResults == 0) {
-				pages = count % maxResults;
+				pages = count / maxResults;
 			} else {
-				pages = (count % maxResults) + 1L;
+				pages = (count / maxResults) + 1L;
 			}			
 		}
 		//默认配置
@@ -380,6 +386,7 @@ public class CheckOrderServiceImpl implements CheckOrderService {
 		map.put("pages", pages);
 		nextPage = pagination(type, cp);
 		map.put("currentPage", nextPage);
+		SqfsSessionContext.push("pdInfo", map);
 		return map;
 	}
 	

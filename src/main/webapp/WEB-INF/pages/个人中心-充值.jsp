@@ -18,6 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="css/user.css" />
 <link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
 <script type="text/javascript" src="script/jquery.min.js"></script>
+<script type="text/javascript" src="js/user-check-1.0.1.js"></script>
 <script type="text/javascript" src="script/common.js"></script>
 <script src="script/user.js" type="text/javascript"></script>
 
@@ -61,8 +62,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="fn-left logo"> <a class="" href="/"> <img src="images/logo.png"  title=""> </a> </div>
       <ul class="top-nav fn-clear">
         <li class="on"> <a href="index">首页</a> </li>
-        <li> <a href="invest/investList" class="">我要投资</a> </li>
-        <li> <a href="trans/loan3/home" class="">我要贷款</a> </li>
+        <li> <a href="invest/investList" id="gotoInvest" >我要投资</a> </li>
+ <li> <a href="trans/loan5/home"  id="gotoLoanPage">我要贷款</a>
+ <input type="hidden" value="${sessionScope.info.user_checked } " id="user_check_info_flag"> </li>
         <li> <a href="帮助中心/home">安全保障</a> </li>
         <c:choose>
         	<c:when test="${sessionScope.info.user_id==null }">
@@ -99,10 +101,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	<div class="alert-title"><h3>提示</h3></div>
             	<div class="alert-main">
             		<form id="notOpenAccountForm" action="trans/PersonalCenter/OpenThirdParty/${sqUser.user_id }">
-		        		<p class="msg6" align="center">
+		        		<p class="msg6" id="show-number" align="center">
 		        			用户在充值或提现前，需开通第三方账户。<br>
 		        			此页面将在10秒后自动跳转到开通第三方账户页面<br>
-		        			<em id="show-number"></em>
 		        		</p>
 		        		<a href="trans/PersonalCenter/OpenThirdParty/${sqUser.user_id }" id="openAccountAId" class="btn-ok txt-center">马上开通第三方账户</a>
 		        	</form>
@@ -120,7 +121,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					clearInterval(intervalid); 
 					$("#notOpenAccountForm").submit();
 				} 
-					$("#show-number").html(i); 
+					$("#show-number").html("用户在充值或提现前，需开通第三方账户。<br>此页面将在"+i+"秒后自动跳转到开通第三方账户页面<br>"); 
 					i--; 
 			} 
 		</script> 

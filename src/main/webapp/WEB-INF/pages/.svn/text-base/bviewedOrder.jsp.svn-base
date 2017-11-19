@@ -39,12 +39,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="script/jquery.min.js"></script>
 	<script type="text/javascript">
 		function gogo(){
-			var currentPage=$("#pageNum").val();			
+			var currentPage=$("#pageNum").val();
+			currentPage = currentPage * 1;
 			var totalPage=$("#totalPage").html();
+			totalPage = totalPage * 1;
+			var likeorderid=$("#likeorderid").val();
+			var startTime=$("#startTime").val();
+			var endTime=$("#endTime").val();			
+			var comment=$("#comment option:selected").val(); 
+			
 			if(currentPage>totalPage||currentPage<=0){
 				alert("请输入正确的页码!");
 			}else{
-				window.location.href="backStage/m/bviewedOrder?currentPage="+currentPage
+				window.location.href="backStage/m/bviewedOrder?currentPage="+currentPage+"&likeResearch.likeorderid="+likeorderid+"&likeResearch.startTime="+startTime+"&likeResearch.endTime="+endTime+"&likeResearch.comment="+comment
 			}
 		}
 		
@@ -73,18 +80,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    			<div style="width: 100%" align="left">
    			<form action="backStage/m/bviewedOrder" method="post" id="myForm" class="form-horizontal" style="padding-left: 5px;">
 			<table class="table-condensed">
-				<tr><td>订单号:</td><td><input type="text" name="likeResearch.likeorderid" size="15" value="${viewedSearch.likeorderid }" class="form-control"></td></tr>
+				<tr><td>借贷人:</td><td><input type="text" id="likeorderid" name="likeResearch.likeorderid" size="15" value="${viewedSearch.likeorderid }" class="form-control"></td></tr>
 				<tr>
-					<td>订单日期:</td><td><input type="text" name="likeResearch.startTime" size="15" id="startTime" onclick="WdatePicker()" readonly="readonly"
+					<td>订单日期:</td><td><input type="text" id="startTime" name="likeResearch.startTime" size="15" id="startTime" onclick="WdatePicker()" readonly="readonly"
 					value="<fmt:formatDate value="${viewedSearch.startTime }" pattern="yyyy-MM-dd"/>" 
 					placeholder="请选择开始日期" class="form-control"></td>
-					<td><input type="text" name="likeResearch.endTime" size="15" class="form-control" onclick="WdatePicker()" readonly="readonly" value="<fmt:formatDate value="${viewedSearch.endTime }" pattern="yyyy-MM-dd" />" id="endTime" placeholder="请选择结束日期"></td>
+					<td><input type="text" name="likeResearch.endTime"  size="15" class="form-control" onclick="WdatePicker()" readonly="readonly" value="<fmt:formatDate value="${viewedSearch.endTime }" pattern="yyyy-MM-dd" />" id="endTime" placeholder="请选择结束日期"></td>
 				</tr>
 				<tr><td>审核意见:</td><td>
-				<select name="likeResearch.comment" class="btn btn-default">
-				<option >请选择</option>
-				<option value="同意">同意</option>
-				<option value="驳回">驳回</option>
+				<select name="likeResearch.comment" class="btn btn-default" id="comment">
+				<option >请选择</option>			
+					<c:if test="${viewedSearch.comment=='同意' }">
+						<option value="同意" selected="selected">同意</option>
+						<option value="驳回" >驳回</option>
+					</c:if>
+					<c:if test="${viewedSearch.comment=='驳回' }">
+						<option value="驳回" selected="selected">驳回</option>
+						<option value="同意" >同意</option>
+					</c:if>
+					
+					<c:if test="${empty viewedSearch.comment }">
+						<option value="驳回" >驳回</option>
+						<option value="同意" >同意</option>
+					</c:if>
 				</select></td>
 				<tr>
 					<td><input type="button" value="搜索" id="myButton" class="btn btn-info"></td>
@@ -98,11 +116,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    			<h5 align="left" style="background-image: url('bpic/unviewlist.png');background-repeat:no-repeat;height:40px;"></h5>
    			<div class="panel panel-primary" align="center">
 		<table style="border:1px solid black; width:100%;text-align: center;" cellpadding="1px" cellspacing="1px" class="panel-title">
-			<tr bgcolor="#EECFA1"><td>序号</td><td>订单号</td><td>订单时间</td><td>借贷金额</td><td>审批意见</td><td>审批时间</td><td>订单详情</td></tr>
+			<tr bgcolor="#EECFA1"><td>序号</td><td>借贷人</td><td>订单时间</td><td>借贷金额</td><td>审批意见</td><td>审批时间</td><td>订单详情</td></tr>
 			<c:forEach items="${loans }"  var="loan" varStatus="str">
 				<tr>
 				<td>${str.index+1}</td>
-				<td>${loan.loan_dd_id}</td>
+				<td>${loan.t_name}</td>
 				<td><fmt:formatDate value="${loan.loan_date }" pattern="yyyy-MM-dd" /></td>
 				<td>${loan.loan_money }</td>
 				<td>${loan.dd_state }</td>
@@ -116,26 +134,46 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			共有 <font id="totalPage">${checkedOrders.totalPage }</font>页&nbsp;&nbsp;&nbsp;
 	   			当前第 ${checkedOrders.currentPage } 页&nbsp;&nbsp;&nbsp;
 	   			共有 ${checkedOrders.totalSize } 条记录
-	   			<a href="backStage/m/bviewedOrder?currentPage=1&likeResearch.likeorderid=${viewedSearch.likeorderid}&likeResearch.startTime=${viewedSearch.startTime}&likeResearch.endTime=${viewedSearch.endTime}&likeResearch.comment=${viewedSearch.comment}" >首页</a>
-	   														
-				<c:choose> 
+	   			
+	   			<c:choose> 
 					<c:when test="${checkedOrders.currentPage==1}">     
-						上一页   
+						首页
 					</c:when>  					 
 					<c:otherwise>     
-						  <a href="backStage/m/bviewedOrder?currentPage=${checkedOrders.currentPage-1}&likeResearch.likeorderid=${viewedSearch.likeorderid}&likeResearch.startTime=${viewedSearch.startTime}&likeResearch.endTime=${viewedSearch.endTime}&likeResearch.comment=${viewedSearch.comment}" >上一页</a>
+						 <a href="backStage/m/bviewedOrder?currentPage=1&likeResearch.likeorderid=${viewedSearch.likeorderid}&likeResearch.startTime=<fmt:formatDate value="${viewedSearch.startTime }" pattern="yyyy-MM-dd"/>&likeResearch.endTime=<fmt:formatDate value="${viewedSearch.endTime }" pattern="yyyy-MM-dd"/>&likeResearch.comment=${viewedSearch.comment}" >首页</a>
 					</c:otherwise> 
 				</c:choose>
+											
+				 
+				 <c:choose> 
+					<c:when test="${checkedOrders.currentPage==1 }">    
+						上一页 
+					</c:when>  					 
+					<c:otherwise>
+						  <a href="backStage/m/bviewedOrder?currentPage=${checkedOrders.currentPage-1 }&likeResearch.likeorderid=${viewedSearch.likeorderid}&likeResearch.startTime=<fmt:formatDate value="${viewedSearch.startTime }" pattern="yyyy-MM-dd"/>&likeResearch.endTime=<fmt:formatDate value="${viewedSearch.endTime }" pattern="yyyy-MM-dd"/>&likeResearch.comment=${viewedSearch.comment}">上一页</a>
+					</c:otherwise> 
+				</c:choose>	
+				 
+				 
 								
 				<c:choose> 
 					<c:when test="${checkedOrders.currentPage==checkedOrders.totalPage }">    
 						下一页 
 					</c:when>  					 
 					<c:otherwise>
-						  <a href="backStage/m/bviewedOrder?currentPage=${checkedOrders.currentPage+1 }&likeResearch.likeorderid=${viewedSearch.likeorderid}&likeResearch.startTime=${viewedSearch.startTime}&likeResearch.endTime=${viewedSearch.endTime}&likeResearch.comment=${viewedSearch.comment}">下一页</a>
+						  <a href="backStage/m/bviewedOrder?currentPage=${checkedOrders.currentPage+1 }&likeResearch.likeorderid=${viewedSearch.likeorderid}&likeResearch.startTime=<fmt:formatDate value="${viewedSearch.startTime }" pattern="yyyy-MM-dd"/>&likeResearch.endTime=<fmt:formatDate value="${viewedSearch.endTime }" pattern="yyyy-MM-dd"/>&likeResearch.comment=${viewedSearch.comment}">下一页</a>
 					</c:otherwise> 
 				</c:choose>	 	    	 	
-	    	 	<a href="backStage/m/bviewedOrder?currentPage=${checkedOrders.totalPage }&likeResearch.likeorderid=${viewedSearch.likeorderid}&likeResearch.startTime=${viewedSearch.startTime}&likeResearch.endTime=${viewedSearch.endTime}&likeResearch.comment=${viewedSearch.comment}">尾页</a>&nbsp;&nbsp;
+	    	 	
+	    	 	<c:choose> 
+					<c:when test="${checkedOrders.currentPage==checkedOrders.totalPage}">     
+						尾页
+					</c:when>  					 
+					<c:otherwise>     
+						 <a href="backStage/m/bviewedOrder?currentPage=${checkedOrders.totalPage }&likeResearch.likeorderid=${viewedSearch.likeorderid}&likeResearch.startTime=<fmt:formatDate value="${viewedSearch.startTime }" pattern="yyyy-MM-dd"/>&likeResearch.endTime=<fmt:formatDate value="${viewedSearch.endTime }" pattern="yyyy-MM-dd"/>&likeResearch.comment=${viewedSearch.comment}">尾页</a>&nbsp;&nbsp;
+					</c:otherwise> 
+				</c:choose>
+	    	 		
 	    	 	<input type="text" id="pageNum" size="1" >
 	    	 	<a href="javascript:gogo()"><%=logo%></a> 
 				</div>

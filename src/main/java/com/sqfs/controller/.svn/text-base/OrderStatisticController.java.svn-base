@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import com.sqfs.utils.SqfsSessionContext;
  * @author LSZ
  */
 @Controller
+@Scope("prototype")
 @RequestMapping("/backStage")
 public class OrderStatisticController {
 

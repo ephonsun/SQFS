@@ -30,7 +30,7 @@ public class SqUser implements Serializable {
 	private String d_pwd;//登录密码
 	private String user_name;//用户名
 	private String bank_card;//银行卡号
-	private BigDecimal account_balance;//账户余额
+	private BigDecimal account_balance = new BigDecimal(0.00);//账户余额
 	private String user_pic;//用户头像
 	private String t_name;//真实姓名
 	private String id_card;//身份证号码     
@@ -58,7 +58,7 @@ public class SqUser implements Serializable {
 	private Date shang_time;//上次登陆时间
 	private String third_party_payment;//第三方支付
 	private String tombstone;//逻辑删除
-
+	private int user_checked;//是否已经实名认证,0表示未认证1为已认证
 	
 	private List<Loan> loans;//借贷订单集合
 	

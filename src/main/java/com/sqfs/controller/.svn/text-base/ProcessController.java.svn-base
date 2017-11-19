@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -35,6 +36,7 @@ import com.sqfs.utils.SqfsSessionContext;
 
 
 @Controller
+@Scope("prototype")
 @RequestMapping("/backStage")
 @Slf4j
 public class ProcessController {	
@@ -110,7 +112,6 @@ public class ProcessController {
 		List<Loan> loans=checkOrderService.findAllPersonalTask(likeResearch,pageNum);				
 		mv.addObject("loans", loans);
 		mv.setViewName("bunviewOrder");
-		log.info("---------------------------------");
 		return mv;
 	}
 	

@@ -20,7 +20,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link href="css/index.css" rel="stylesheet" type="text/css">
 <link href="css/detail.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="script/jquery.min.js"></script>
+<script type="text/javascript" src="js/user-check-1.0.1.js"></script>
+<script type="text/javascript" src="js/list.js"></script>
 <script type="text/javascript" src="script/common.js"></script>
+<script type="text/javascript">
+function jumpTo(){
+	var pag=$("#jump").val();
+	if(pag>=1&&pag<=<%=PageUtil.totalPage%>){
+		location.href="<%=basePath%>invest/investList?currentPage="+pag;
+	}else{
+		alert("输入信息有误,请重新输入");
+	}
+} 
+</script>
 <style type="text/css">
 		td{
 			text-align: center;
@@ -94,8 +106,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="fn-left logo"> <a class="" href="index"> <img src="images/logo.png"  title=""> </a> </div>
       <ul class="top-nav fn-clear">
         <li class="on"> <a href="index">首页</a> </li>
-        <li> <a href="invest/investList" class="">我要投资</a> </li>
-        <li> <a href="trans/loan3/home" class="">我要贷款</a> </li>
+      <li> <a href="invest/investList" id="gotoInvest" >我要投资</a> </li>
+ <li> <a href="trans/loan5/home"  id="gotoLoanPage">我要贷款</a>
+ <input type="hidden" value="${sessionScope.info.user_checked } " id="user_check_info_flag"> </li>
         <li> <a href="帮助中心/home">安全保障</a> </li>
         <c:choose>
         	<c:when test="${sessionScope.info.user_id==null }">
@@ -167,112 +180,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <input id="type2" type="hidden" value="${rate_num_i}"> 
 <input id="type3" type="hidden" value="${rate_id}"> 
 </form> 
-<script type="text/javascript">
-			function jumpTo(){
-				var pag=$("#jump").val();
-				if(pag>=1&&pag<=<%=PageUtil.totalPage%>){
-					location.href="<%=basePath%>invest/investList?currentPage="+pag;
-				}else{
-					alert("输入信息有误,请重新输入");
-				}
-			} 
-		
-			function nextPage() {
-				var currentPage=$("#currentPage").val();
-				var totalPage=$("#totalPage").val();
-				currentPage=parseInt(currentPage);
-				totalPage=parseInt(totalPage);
-				if(currentPage>=totalPage){
-					alert("当前已经是最后一页");
-				}else{
-					$("#currentPage").val(currentPage+1);
-					$("#fy").submit();
-				}
-				
-			}
-			function upPage() {
-				var currentPage=$("#currentPage").val();
-				currentPage=parseInt(currentPage);
-				if(currentPage<=1){
-					alert("当前已经是第一页");
-				}else{
-					$("#currentPage").val(currentPage-1);
-					$("#fy").submit();
-				}
-			}
-			function firstPage() {
-					$("#currentPage").val(1);
-					$("#fy").submit();
-			}
-			function lastPage() {
-				var totalPage=$("#totalPage").val();
-				totalPage=parseInt(totalPage);
-					$("#currentPage").val(totalPage);
-					$("#fy").submit();
-			}
-			$(function() {
-				$("#allBox").toggle(
-					function() {
-						$("input[name='subBox']").prop("checked",true);
-					},
-					function() {
-						$("input[name='subBox']").prop("checked",false);
-					}
-				)
-			})
-		</script>
-		
-		<script type="text/javascript">
-			$(document).ready(function(){
-				if(($("#type1").val())=="不限"){
-					$("#post_type_").prop("checked",true);
-				}
-				if(($("#type1").val())=="车易贷"){
-					$("#post_type_car").prop("checked",true);
-				}
-				if(($("#type1").val())=="房易贷"){
-					$("#post_type_house").prop("checked",true);
-				}
-				if(($("#type2").val())=="rate0"){
-					$("#borrow_interestrate_").prop("checked",true);
-				}
-				if(($("#type2").val())=="rate1"){
-					$("#borrow_interestrate_1").prop("checked",true);
-				}
-				if(($("#type2").val())=="rate2"){
-					$("#borrow_interestrate_2").prop("checked",true);
-				}
-				if(($("#type2").val())=="rate3"){
-					$("#borrow_interestrate_3").prop("checked",true);
-				}
-				if(($("#type2").val())=="rate4"){
-					$("#borrow_interestrate_4").prop("checked",true);
-				}
-				
-				
-				if(($("#type3").val())=="val0"){
-					$("#spread_month_").prop("checked",true);
-				}
-				if(($("#type3").val())=="val1"){
-					$("#spread_month_1").prop("checked",true);
-				}
-				if(($("#type3").val())=="val2"){
-					$("#spread_month_2").prop("checked",true);
-				}
-				if(($("#type3").val())=="val3"){
-					$("#spread_month_3").prop("checked",true);
-				}
-				if(($("#type3").val())=="val4"){
-					$("#spread_month_4").prop("checked",true);
-				}
-				if(($("#type3").val())=="val5"){
-					$("#spread_month_5").prop("checked",true);
-				}
-				
-				
-				
-			})
-		</script>
       <div class="common-problem">
         <h3>常见问题</h3>
         <ul>
@@ -330,7 +237,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
               </div>
             </li>
-            <li class="col-120-2"> <a class="ui-btn btn-gray" href="invest/getInvestsListByLoanId?loan_dd_id=${n.loan_dd_id }">${n.cd_state }</a> </li>
+            <li class="col-120-2"> <a class="ui-btn btn-gray" href="invest/getInvestsListByLoanId?loan_dd_id=${n.loan_dd_id }" >${n.cd_state }</a> </li>
           </ul>
 		</c:forEach>
  	</div>

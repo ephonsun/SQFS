@@ -21,6 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="script/jquery.min.js"></script>
 <script type="text/javascript" src="js/touzi.js"></script>
 <script type="text/javascript" src="script/common.js"></script>
+<script type="text/javascript" src="js/user-check-1.0.1.js"></script>
 <script src="script/ablumn.js"></script>
 <script src="script/plugins.js"></script>
 <!-- <script src="script/detail.js"></script> -->
@@ -65,10 +66,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="fn-left logo"> <a class="" href="index"> <img src="images/logo.png"  title=""> </a> </div>
       <ul class="top-nav fn-clear">
         <li class="on"> <a href="index">首页</a> </li>
-        <li> <a href="invest/investList" class="">我要投资</a> </li>
-        <li> <a href="trans/loan3/home" class="">我要贷款</a> </li>
+         <li> <a href="invest/investList" id="gotoInvest" >我要投资</a> </li>
+ <li> <a href="trans/loan5/home"  id="gotoLoanPage">我要贷款</a>
+ <input type="hidden" value="${sessionScope.info.user_checked } " id="user_check_info_flag"> </li>
         <li> <a href="帮助中心/home">安全保障</a> </li>
-        <li class="top-nav-safe"> <a href="个人中心首页/home">我的账户</a> </li>
+ 		<c:choose>
+        	<c:when test="${sessionScope.info.user_id==null }">
+        		<li class="top-nav-safe"> <a href="trans/PersonalCenter/getPensonalInformation/52555">我的账户</a> </li>
+        	</c:when>
+        	<c:otherwise>
+        		<li class="top-nav-safe"> <a href="trans/PersonalCenter/getPensonalInformation/${sessionScope.info.user_id }">我的账户</a> </li>
+        	</c:otherwise>
+        </c:choose>        
         <li> <a href="公司简介/home">关于我们</a> </li>
       </ul>
     </div>
@@ -130,7 +139,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<table cellpadding="0" cellspacing="0px"   style="line-height:60px; ">
 				<tr>
 					<td width="7%">账户余额:<span id="yue">${info.account_balance }</span>元</td>
-					<td  width="5%"><a href="个人中心-充值/home"><span id="chongzhi">[充值]</span></a></td>
+					<td  width="5%"><a href="trans/PersonalCenter/Recharge/${info.user_id }/2"><span id="chongzhi">[充值]</span></a></td>
 				</tr>
 				<tr>
 					<td>投资金额:<input id="tzje" type="text" name="tz_money" onmouseout="huodeshouyi()"/></td>
@@ -144,7 +153,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<tr>
 				
 					<td align="center">
-						<input id="lijitouzi" type="submit" class="button green" value="立即投资" onclick="return confirm('是否确认立即投资')"/>
+						<input type="hidden" value="${sessionScope.info.user_checked } " id="user_check_info_flag"> 
+						<input id="lijitouzi" type="submit" class="button green" value="立即投资" onclick="return _doInvest();"/>
 					</td>
 				</tr>
 			</table>

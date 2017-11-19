@@ -216,7 +216,12 @@ public class PersonalCenterServiceImpl implements PersonalCenterService {
 			
 			for (Invest invest : invests) {
 				//回款时间
-				invest.setLeadTime(DateUtil.afterTime(invest.getLoan().getRelease_date(), invest.getLoan().getCommencement_date(), invest.getLoan().getRate().getHk_time(), 0));
+				if(invest.getLoan().getSp_time2() != null){
+					invest.setLeadTime(DateUtil.afterTime(invest.getLoan().getSp_time2(), invest.getLoan().getCommencement_date(), invest.getLoan().getRate().getHk_time(), 0));
+				}else{
+					invest.setLeadTime(DateUtil.afterTime(invest.getLoan().getSp_time1(), invest.getLoan().getCommencement_date(), invest.getLoan().getRate().getHk_time(), 0));
+				}
+				
 				principalToBeCollected = principalToBeCollected.add(invest.getTz_money());//待收本金
 				accrualtToBeCollected = accrualtToBeCollected.add(invest.getAccrualt());//待收收益
 				invest.setPrincipalAndAccrualt(principalToBeCollected.add(accrualtToBeCollected));//回款金额
@@ -240,11 +245,9 @@ public class PersonalCenterServiceImpl implements PersonalCenterService {
 	public boolean Recharge(String card,BigDecimal money,String user_id,String str){
 		if(true){
 			int i = 0;
-			if(str.equals("1")){
-				i = centerMapper.Recharge(money, user_id);
-			}else{
-				i = centerMapper.Recharge2(money, user_id);
-			}
+
+			i = centerMapper.Recharge(money, user_id);
+
 			if(i>0){
 				return true;
 			}else{

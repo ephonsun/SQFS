@@ -18,6 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="css/user.css" />
 <link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
 <script type="text/javascript" src="script/jquery.min.js"></script>
+<script type="text/javascript" src="js/user-check-1.0.1.js"></script>
 <script type="text/javascript" src="script/common.js"></script>
 <script src="script/user.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -110,8 +111,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="fn-left logo"> <a class="" href="index"> <img src="images/logo.png"  title=""> </a> </div>
       <ul class="top-nav fn-clear">
         <li class="on"> <a href="index">首页</a> </li>
-        <li> <a href="invest/investList" class="">我要投资</a> </li>
-        <li> <a href="trans/loan3/home" class="">我要贷款</a> </li>
+         <li> <a href="invest/investList" id="gotoInvest" >我要投资</a> </li>
+ <li> <a href="trans/loan5/home"  id="gotoLoanPage">我要贷款</a>
+ <input type="hidden" value="${sessionScope.info.user_checked } " id="user_check_info_flag"> </li>
         <li> <a href="帮助中心/home">安全保障</a> </li>
         <c:choose>
         	<c:when test="${sessionScope.info.user_id==null }">
@@ -223,6 +225,48 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					$("#mask").css("display","none");
 					$("#"+op).css("display","none");
 			}
+			
+			
+			function idVerify(callback){
+				//身份证号
+				var idCard = $("#idCard").val();
+				//姓名
+				var tname = $("#tname").val();
+				//接口地址
+				var qurl = "https://way.jd.com/youhuoBeijing/test?cardNo="+idCard+"&realName="+tname+"&appkey=d7045d19802f99ca6b47a85804ce95cb";
+				
+				if(tname != null && tname != ""){
+					if(idCard != null && idCard != ""){
+						$.ajax({ 
+							//雅虎代理
+							url: 'http://query.yahooapis.com/v1/public/yql',   
+							dataType: 'jsonp',  
+							async: false,
+							data: {    
+								q: "select * from json where url=\'" + qurl + "'",    
+								format: "json"    
+							},    
+							success: function (data){  
+								console.log(data);
+								var flag = data.query.results.json.result.result.isok;
+								if(flag == "true"){
+									$("#form").submit();
+								}else{
+									$("#verifyFalse").css("display","block");
+								}
+							},
+							error: function (){
+								$("#verifyFalse").css("display","block");
+							}
+						});
+						
+					}else{
+						$("#verifyFalse").css("display","block");
+					}
+				}else{
+					$("#verifyFalse").css("display","block");
+				}
+			}
 			//]]>
 		</script>
     <input id="investorValiCodeError" type="hidden" name="investorValiCodeError">
@@ -245,7 +289,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 		<input type="hidden"  class="pay-txt" name="t_name"  value="${sqUser.t_name }" >
                 	</c:when>
                 	<c:otherwise>
-                		<input type="text"  class="pay-txt" name="t_name" maxlength="16"  placeholder="您的真实姓名">
+                		<input type="text"  class="pay-txt" id="tname" name="t_name" maxlength="16"  placeholder="您的真实姓名">
                 	</c:otherwise>
                 </c:choose>
                 <div id="realnameErrorDiv"></div>
@@ -258,15 +302,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 		<input type="hidden" class="pay-txt" name="id_card"  value="${sqUser.id_card }" >
                 	</c:when>
                 	<c:otherwise>
-                		<input id="idCard" type="text" class="pay-txt" name="id_card" maxlength="18" placeholder="您的身份证号">
-                		<input type="button" value="验证身份信息" onclick="javascript: _freeweather();"/><br />
-						出生日期:<span id="dizhi"></span><br />
-						性别:<span id="riqi"></span><br />
-						户籍地址:<span id="tianqi"></span>
+                		<input type="text" class="pay-txt" id="idCard" name="id_card" maxlength="18" placeholder="您的身份证号">
                 	</c:otherwise>
                 </c:choose>
                 <div id="idCardErrorDiv">
-                  <p style="margin-top:10px;">身份证信息认证后将不可修改，请您仔细填写</p>
+                	<p id="verifyFalse" style="display: none" >验证失败!</p>
+                  	<p style="margin-top:10px;">身份证信息认证后将不可修改，请您仔细填写</p>
                 </div>
               </li>
             </ul>
@@ -290,7 +331,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 		<input type="button" value="已开户" style="border:none; background-color: #A0A0A0; " disabled="disabled" class="btn-paykh">
                 	</c:when>
                 	<c:otherwise>
-                		<input type="submit" value="开户" style="border:none;" class="btn-paykh">
+                		<input type="button" value="开户" style="border:none;" class="btn-paykh" onclick="idVerify()"  >
                 	</c:otherwise>
                 </c:choose>
               </li>

@@ -49,15 +49,18 @@ function huodeshouyi(){
 		$('#lijitouzi').attr('disabled',false);//添加disabled属性
 	}
 }
-function checkSubmit(){
-	var checkSubmitFlg = false; 
-	if(checkSubmitFlg ==true){
-		return false; //当表单被提交过一次后checkSubmitFlg将变为true,根据判断将无法进行提交。 
-	} 
-	if(falgf){
-		return  true;
-	}else{
-		return  false;
+//投资前如果用户尚未实名认证,则跳转到实名认证中
+function _doInvest(){
+	var flag = $("#user_check_info_flag").val();
+	if(flag != 1 && flag.trim() != '') {
+		if(confirm('您尚未实名认证,请前往认证')) {
+			window.location.href = "loan3/home";
+			return true;			
+		} else {
+			return false;
+		}
 	}
-	checkSubmitFlg ==true; 
+	if(falgf)
+		return true;
+	return false;
 }

@@ -10,14 +10,27 @@ var page = {
 			var del_true = confirm('您确认删除吗?');
 			if(del_true) {				
 				page.sqfsAjax('backStage/m/del', d);
+			} else {
+				return false;
 			}
 		});
 	},
 	//页面跳转
 	gotoPage : function() {
 		$('#input_go').on('click', function(){
-			var p = $('#input_page').val();
-			page.sqfsAjax('backStage/m/go', p);
+			var totle = $("#input_page_totle_hidden").val();
+			var page = $("#input_page").val();
+			if(page == '' || page.trim() == '') {
+				$.messager.alert("程序猿提示", "输入的页数无效");
+				return;
+			}
+			totle = totle * 1;
+			page = page * 1;
+			if(page <= totle && page > 0) {
+				page.sqfsAjax('backStage/m/go', page);
+			} else {
+				$.messager.alert("程序猿提示", "输入的页数无效。");
+			}
 		});
 	},
 	//尾页
@@ -68,6 +81,7 @@ var page = {
 				var $td_do = $('<td></td>');
 				var $a_del = $('<a href="#">删除</a>');
 				$a_del.prop('name', 'del_deployment');
+				$a_del.prop('href', 'javascript:void(0)');
 				var $a_view = $('<a>查看流程图</a>');
 				$a_view.prop("target", "_blank");
 				$a_view.prop("href", "backStage/m/v/" + list[i].id);
@@ -94,6 +108,8 @@ var page = {
 		//设置分页
 		//清除信息
 		$("ul > li").remove();
+		$("#input_page_totle_hidden").val('');
+		$("#input_page_totle_hidden").val(map.pages);
 		//
 		var $li_info = $('<li></li>');
 		var text = '共有 ' + map.pages + ' 页  ';
@@ -109,8 +125,10 @@ var page = {
 		} else {
 			var $a_first = $("<a href='#'>首页</>");
 			$a_first.prop('id', 'first_page');
+			$a_first.prop('href', 'javascript:void(0)');
 			var $a_pre = $("<a href='#'>上一页</>");
 			$a_pre.prop('id', 'pre_page');
+			$a_pre.prop('href', 'javascript:void(0)');
 			$li_first.append($a_first);
 			$li_pre.append($a_pre);
 		}
@@ -122,8 +140,10 @@ var page = {
 		} else {
 			var $a_last = $("<a href='#'>尾页</>");
 			$a_last.prop('id', 'last_page');
+			$a_last.prop('href', 'javascript:void(0)');
 			var $a_next = $("<a href='#'>下一页</>");
 			$a_next.prop('id', 'next_page');
+			$a_next.prop('href', 'javascript:void(0)');
 			$li_last.append($a_last);
 			$li_next.append($a_next);
 		}
@@ -161,6 +181,21 @@ var page = {
 				
 			}
 		});
+	},
+	//
+	submitProcessFile : function() {
+		$("#_submitProcessFile").on("submit", function() {
+			var name = $("input[name='processDefinitionName']").val();
+			var zipDocs = $("input[name='zipDocs']").val();
+			if((name.trim() != "" || name != "") && zipDocs != "") {
+				if(confirm("确定上传文件吗?"))
+					return true;
+				return false;
+			} else {
+				$.messager.alert("程序猿提示", "额...名称和文件都不能为空");
+				return false;
+			}
+		});
 	}
 };
 
@@ -171,4 +206,5 @@ $().ready(function() {
 	page.lastPage();
 	page.gotoPage();
 	page.deleteDeployment();
+	page.submitProcessFile();
 });

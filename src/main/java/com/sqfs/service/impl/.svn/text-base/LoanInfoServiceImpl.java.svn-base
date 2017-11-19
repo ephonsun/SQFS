@@ -41,7 +41,6 @@ public class LoanInfoServiceImpl implements LoanInfoService {
 	 * 添加借贷订单
 	 */
 	public int addLoanProduct(Loan loan) {
-		
 		//先删除redis
 		String s = "aa";//String变量 
 		byte[] b = s.getBytes();//String转换为byte[] 

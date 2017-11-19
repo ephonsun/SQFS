@@ -18,6 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="css/user.css" />
 <link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
 <script type="text/javascript" src="script/jquery.min.js"></script>
+<script type="text/javascript" src="js/user-check-1.0.1.js"></script>
 <script type="text/javascript" src="script/common.js"></script>
 <script src="script/user.js" type="text/javascript"></script>
 </head>
@@ -60,8 +61,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="fn-left logo"> <a class="" href="index"> <img src="images/logo.png"  title=""> </a> </div>
       <ul class="top-nav fn-clear">
         <li class="on"> <a href="index">首页</a> </li>
-        <li> <a href="invest/investList" class="">我要投资</a> </li>
-        <li> <a href="trans/loan3/home" class="">我要贷款</a> </li>
+         <li> <a href="invest/investList" id="gotoInvest" >我要投资</a> </li>
+ <li> <a href="trans/loan5/home"  id="gotoLoanPage">我要贷款</a>
+ <input type="hidden" value="${sessionScope.info.user_checked } " id="user_check_info_flag"> </li>
         <li> <a href="帮助中心/home">安全保障</a> </li>
         <c:choose>
         	<c:when test="${sessionScope.info.user_id==null }">
@@ -88,7 +90,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <li><span><a style="font-size:14px;text-align:center;width:115px;padding-right:35px;" href="trans/PersonalCenter/getReturnedMoneyPlan/${sqUser.user_id }">回款计划</a></span></li>
         <li class=""><span><a href="trans/PersonalCenter/OpenThirdParty/${sqUser.user_id}"><i class="dot dot02"></i>开通第三方</a> </span> </li>
         <li><span><a href="trans/PersonalCenter/Recharge/${sqUser.user_id }/2"><i class="dot dot03"></i>充值</a></span></li>
-        <li class=""><span><a href="个人中心-提现1/home"><i class="dot dot04"></i>提现</a></span></li>
+        <li class=""><span><a href="trans/PersonalCenter/Withdraw/${sqUser.user_id }/2"><i class="dot dot04"></i>提现</a></span></li>
         <li><span><a href="trans/PersonalCenter/accountSetting/${sqUser.user_id }"><i class="dot dot09"></i>账户设置</a></span></li>
       </ul>
     </div>
@@ -317,6 +319,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 
 			function getShowPayVal1(){
+				var money = $("#form\\:actualMoney1").val();
+				money = money * 1;
+				if(money < 0) {
+					confirm('充值金额必须大于0!');
+					return false;
+				}
 				var rechargeFlag=checkRecharge1();
 				var bankCardFlag = checkBankCardNo();
 				var agreeFlag=validateAgree2();

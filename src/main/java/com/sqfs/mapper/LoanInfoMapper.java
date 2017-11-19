@@ -19,9 +19,11 @@ public interface LoanInfoMapper {
 	 * @return
 	 * @exception
 	 */
-	@Update("update sq_user set hy_status=#{hy_status},jj_name=#{jj_name},jj_name_phone=#{jj_name_phone},"
+	@Update("update sq_user set  birthDate=#{birthDate},sex=#{sex},bank_card=#{bank_card},"
+			+ "email=#{email},education=#{education},"
+			+ "hy_status=#{hy_status},jj_name=#{jj_name},jj_name_phone=#{jj_name_phone},"
 			+ "jj_name_rela=#{jj_name_rela},h_address=#{h_address},x_address=#{x_address},"
-			+ "w_position=#{w_position},m_income=#{m_income}  "
+			+ "w_position=#{w_position},m_income=#{m_income},user_checked=#{user_checked}  "
 			+ " where  user_id=#{user_id}")
 	int updateSqUser(SqUser sqUser);
 	
@@ -69,9 +71,9 @@ public interface LoanInfoMapper {
 	 */
 	@Insert("insert into loan_dd (loan_dd_id,user_id,loan_money,loan_name,loan_date,"
 			+ "loan_num,loan_type,rate_id,hk_type,loan_use,sh_level,dd_state,cd_state,"
-			+ "min_money,tran_id,zc_id) values (#{loan_dd_id},#{user_id},#{loan_money},"
+			+ "min_money,tran_id,zc_id,commencement_date) values (#{loan_dd_id},#{user_id},#{loan_money},"
 			+ "#{loan_name},sysdate(),sysdate(),#{loan_type},#{rate_id},#{hk_type},#{loan_use},"
-			+ "#{sh_level},#{dd_state},#{cd_state},#{min_money},#{tran_id},#{zc_id})")
+			+ "#{sh_level},#{dd_state},#{cd_state},#{min_money},#{tran_id},#{zc_id},5)")
 	int addLoanProduct(Loan loan);
 	
 	

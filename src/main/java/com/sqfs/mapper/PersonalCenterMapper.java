@@ -44,7 +44,7 @@ public interface PersonalCenterMapper {
 			+ "jj_name_phone,jj_name_rela,id_card_z,"
 			+ "id_card_f,hukouben,jiehunzheng,"
 			+ "work_info,liushuizhang,zhengxin,"
-			+ "shang_time,third_party_payment,tombstone "
+			+ "shang_time,third_party_payment,tombstone, user_checked "
 			+ "from sq_user where user_id=#{user_id} and (tombstone is null or tombstone != '1')")
 	@Results({
 		@Result(id=true,property="user_id",column="user_id",javaType=String.class),
@@ -80,6 +80,7 @@ public interface PersonalCenterMapper {
 		@Result(property="shang_time",column="shang_time",javaType=Date.class),
 		@Result(property="third_party_payment",column="third_party_payment",javaType=String.class),
 		@Result(property="tombstone",column="tombstone",javaType=String.class),
+		@Result(property="user_checked",column="user_checked",javaType=int.class),
 		@Result(property="loans",javaType=List.class,column="user_id",
 				many=@Many(select="com.sqfs.mapper.PersonalCenterMapper.getLoansByUserId")),
 		@Result(property="invests",javaType=List.class,column="user_id",
@@ -222,11 +223,11 @@ public interface PersonalCenterMapper {
 	 * @param user_id
 	 * @return
 	 */
-	@Update("update sq_user set account_balance = account_balance+#{money} where user_id=#{user_id}")
-	int Recharge(@Param("money")BigDecimal money,@Param("user_id")String user_id);
 	
 	@Update("update sq_user set account_balance = #{money} where user_id=#{user_id}")
-	int Recharge2(@Param("money")BigDecimal money,@Param("user_id")String user_id);
+	int Recharge(@Param("money")BigDecimal money,@Param("user_id")String user_id);
+	
+	
 	/**
 	 * 提现
 	 * @param money

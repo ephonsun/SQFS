@@ -163,28 +163,24 @@
                     dataType: "jsonp",//返回文件类型跨域类型
                     jsonp:"jsoncallback", 
                    // sonpCallback:"fonc",
-                    url:"http://106.ihuyi.com/webservice/sms.php?method=Submit&account=C97208215&password=360b89b545b13955c3bb24422e82db7b&mobile="+phones+"&content=您的验证码是："+Num+"。请不要把验证码泄露给其他人。", //发送请求地址带着验证码去后台判断, //发送请求地址
+                    url:"http://106.ihuyi.com/webservice/sms.php?method=Submit&account=C24073395&password=65a0c61ae40eb164b97589597697298f&mobile="+phones+"&content=您的验证码是："+Num+"。请不要把验证码泄露给其他人。", //发送请求地址带着验证码去后台判断, //发送请求地址
                     //async: false,//同步 
                    
                     //请求成功后的回调函数有两个参数
                     success: function(data) {
                         flag4 = 1;
-                        if (data.msg == "提交成功") { 
+                        if ("2"==code){
                             wait = 300;
                             flaghave = 0;
-                            $("#phonVerifys").text("");
-                            $("#phonVerifys").append("<span style=color:green>信息已发送,请注意查收</span>");
                             
-                        } else if (data.msg == "3") {
+                            $("#phoneJy").text("");
+                            $("#phoneJy").append("<span style=color:green>信息已发送,请注意查收</span>");
+                            
+                        } else if (data.code == 0) {
                             wait = 300;
                             flaghave = 1;
                             $phoneMsg.text("");
                             $phoneMsg.html("<span style=color:#ff7800>发送手机号发生错误,请刷新重试</span>");
-                        } else if (data['msg'] == "4") {
-                            wait = 300;
-                            flaghave = 1;
-                            $phoneMsg.text("");
-                            $phoneMsg.html("<span style=color:#ff7800>一分钟之内只能发送一次验证码</span>");
                         } else {
                             flag4 = 0;
                             isSuccess = true;
@@ -234,7 +230,7 @@
                     }else
                     if (strVal.length < 6 || strVal.length > 24) {
                         $(ids).text("");
-                        $(ids).append("<span style=color:#ff7800>a密码要大于6位小于24位</span>");
+                        $(ids).append("<span style=color:#ff7800>密码要大于6位小于24位</span>");
                     } else
                     if (!pattern.test(strVal)) {
                         $(ids).text("");

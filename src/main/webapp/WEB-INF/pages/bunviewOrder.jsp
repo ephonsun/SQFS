@@ -37,11 +37,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript">
 		function gogo(){
 			var currentPage=$("#pageNum").val();
+			currentPage=currentPage*1;
 			var totalPage=$("#totalPage").html();
-			if(currentPage>totalPage||currentPage<=0){
+			totalPage=totalPage*1;
+			var likeorderid=$("#likeorderid").val();
+			var startTime=$("#startTime").val();
+			var endTime=$("#endTime").val();
+			if(currentPage>totalPage||currentPage<=1){
 				alert("请输入正确的页码!");
 			}else{
-			window.location.href="backStage/m/bunviewOrder?currentPage="+currentPage 
+			window.location.href="backStage/m/bunviewOrder?currentPage="+currentPage+"&likeResearch.likeorderid="+likeorderid+"&likeResearch.startTime="+startTime+"&likeResearch.endTime="+endTime
 			}	
 		}
 		
@@ -70,12 +75,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<table class="table-condensed">				
 						
 						<tr>
-							<td>订单号:</td><td><input type="text" name="likeResearch.likeorderid" size="15" value="${unviewSearch.likeorderid}" class="form-control"></td>
+							<td>订单号:</td><td><input type="text" id="likeorderid" name="likeResearch.likeorderid" size="15" value="${unviewSearch.likeorderid}" class="form-control"></td>
 						</tr>
 						
 						<tr>						
 							<td>订单日期:</td><td><input type="text" name="likeResearch.startTime" size="15" 
-							value="<fmt:formatDate value="${unviewSearch.startTime }" pattern="yyyy-MM-dd" />" 
+							value="<fmt:formatDate value="${unviewSearch.startTime }" pattern="yyyy-MM-dd"/>" 
 							 onclick="WdatePicker()" readonly="readonly" id="startTime" class="form-control" placeholder="请选择开始日期"></td>
 							 <td><input type="text" name="endTime" size="15"  onclick="WdatePicker()" 
 							 value="<fmt:formatDate value="${unviewSearch.endTime }" pattern="yyyy-MM-dd" />" 
@@ -106,7 +111,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        		<c:forEach items="${loans}"  var="loan" varStatus="str">
 							<tr>
 							<td>${str.index+1}</td>
-							<td>${loan.loan_dd_id}</td>
+							<td>${loan.t_name}</td>
 							<td><fmt:formatDate value="${loan.loan_date }" pattern="yyyy-MM-dd" /></td>
 							<td>${loan.loan_money }</td>
 							<td><a href="backStage/m/uncheckOrderDetail/${loan.loan_dd_id }">开始审批</a></td>							
@@ -125,14 +130,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				共有<font id="totalPage">${unviewOrders.totalPage }</font> 页&nbsp;&nbsp;
 	   			当前第 ${unviewOrders.currentPage } 页&nbsp;&nbsp;
 	   			共有 ${unviewOrders.totalSize } 条记录
-	   			<a href="backStage/m/bunviewOrder?currentPage=1&likeResearch.likeorderid=${unviewSearch.likeorderid}&likeResearch.startTime=${unviewSearch.startTime}&likeResearch.endTime=${unviewSearch.endTime}">首页</a>
-	   														
+	   			
+	   				
+	   			<c:choose> 
+					<c:when test="${unviewOrders.currentPage ==1||unviewOrders.currentPage==0}">     
+						首页  
+					</c:when>  					 
+					<c:otherwise>     
+						 <a href="backStage/m/bunviewOrder?currentPage=1&likeResearch.likeorderid=${unviewSearch.likeorderid}&likeResearch.startTime=<fmt:formatDate value="${unviewSearch.startTime }" pattern="yyyy-MM-dd"/>&likeResearch.endTime=<fmt:formatDate value="${unviewSearch.endTime }" pattern="yyyy-MM-dd"/>">首页</a>
+					</c:otherwise> 
+				</c:choose>	
+	   				   														
 				<c:choose> 
-					<c:when test="${unviewOrders.currentPage ==1||unviewOrders.currentPage==null}">     
+					<c:when test="${unviewOrders.currentPage ==1||unviewOrders.currentPage==0}">     
 						上一页   
 					</c:when>  					 
 					<c:otherwise>     
-						  <a href="backStage/m/bunviewOrder?currentPage=${unviewOrders.currentPage-1 }&likeResearch.likeorderid=${unviewSearch.likeorderid}&likeResearch.startTime=${unviewSearch.startTime}&likeResearch.endTime=${unviewSearch.endTime}" >上一页</a>
+						  <a href="backStage/m/bunviewOrder?currentPage=${unviewOrders.currentPage-1 }&likeResearch.likeorderid=${unviewSearch.likeorderid}&likeResearch.startTime=<fmt:formatDate value="${unviewSearch.startTime }" pattern="yyyy-MM-dd"/>&likeResearch.endTime=<fmt:formatDate value="${unviewSearch.endTime }" pattern="yyyy-MM-dd"/>" >上一页</a>
 					</c:otherwise> 
 				</c:choose>
 								
@@ -141,10 +155,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						下一页 
 					</c:when>  					 
 					<c:otherwise>     
-						  <a href="backStage/m/bunviewOrder?currentPage=${unviewOrders.currentPage+1 }&likeResearch.likeorderid=${unviewSearch.likeorderid}&likeResearch.startTime=${unviewSearch.startTime}&likeResearch.endTime=${unviewSearch.endTime}">下一页</a>
+						  <a href="backStage/m/bunviewOrder?currentPage=${unviewOrders.currentPage+1 }&likeResearch.likeorderid=${unviewSearch.likeorderid}&likeResearch.startTime=<fmt:formatDate value="${unviewSearch.startTime }" pattern="yyyy-MM-dd"/>&likeResearch.endTime=<fmt:formatDate value="${unviewSearch.endTime }" pattern="yyyy-MM-dd"/>">下一页</a>
 					</c:otherwise> 
 				</c:choose>	 	    	 	
-	    	 	<a href="backStage/m/bunviewOrder?currentPage=${unviewOrders.totalPage }&likeResearch.likeorderid=${unviewSearch.likeorderid}&likeResearch.startTime=${unviewSearch.startTime}&likeResearch.endTime=${unviewSearch.endTime}">尾页</a>
+	    	 		    	 		    	 	
+	    	 	<c:choose> 
+					<c:when test="${unviewOrders.currentPage==unviewOrders.totalPage }">    
+						尾页
+					</c:when>  					 
+					<c:otherwise>     
+	    	 			<a href="backStage/m/bunviewOrder?currentPage=${unviewOrders.totalPage }&likeResearch.likeorderid=${unviewSearch.likeorderid}&likeResearch.startTime=<fmt:formatDate value="${unviewSearch.startTime }" pattern="yyyy-MM-dd"/>&likeResearch.endTime=<fmt:formatDate value="${unviewSearch.endTime }" pattern="yyyy-MM-dd"/>">尾页</a>
+					</c:otherwise> 
+				</c:choose>	 
+	    	 	    	 		
 	    	 		<input type="text" id="pageNum" size="1">    	 		    	 			    	 	
 	    	 	<a href="javascript:gogo()"><%=logo%></a>
 	    	 	

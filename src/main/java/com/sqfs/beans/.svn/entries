@@ -1,15 +1,15 @@
 10
 
 dir
-256
+306
 svn://192.168.188.33/sqfs/src/main/java/com/sqfs/beans
 svn://192.168.188.33
 
 
 
-2017-11-17T04:08:42.840898Z
-237
-liangshizhong
+2017-11-19T02:16:30.427180Z
+290
+qinyingjie
 
 
 svn:special svn:externals svn:needs-lock
@@ -28,7 +28,7 @@ svn:special svn:externals svn:needs-lock
 
 Invest.java
 file
-
+256
 
 
 
@@ -62,7 +62,7 @@ dingzhenxing
 
 LikeResearch.java
 file
-
+256
 
 
 
@@ -96,7 +96,7 @@ chenshaohua
 
 Loan.java
 file
-
+256
 
 
 
@@ -130,7 +130,7 @@ qinyingjie
 
 ManagerInfo.java
 file
-
+256
 
 
 
@@ -164,7 +164,7 @@ qinyingjie
 
 MoneyRecord.java
 file
-
+256
 
 
 
@@ -198,7 +198,7 @@ dingzhenxing
 
 OrderIdTaskID.java
 file
-
+256
 
 
 
@@ -232,7 +232,7 @@ chenshaohua
 
 OrderSearch.java
 file
-
+256
 
 
 
@@ -266,7 +266,7 @@ liangshizhong
 
 OrderStatistics.java
 file
-
+256
 
 
 
@@ -300,7 +300,7 @@ liangshizhong
 
 ProcessDefinitionDto.java
 file
-
+256
 
 
 
@@ -334,7 +334,7 @@ liangshizhong
 
 ProductType.java
 file
-
+256
 
 
 
@@ -368,7 +368,7 @@ qinyingjie
 
 Rate.java
 file
-
+256
 
 
 
@@ -402,7 +402,7 @@ qinyingjie
 
 Repayment.java
 file
-
+256
 
 
 
@@ -436,7 +436,7 @@ qinyingjie
 
 Role.java
 file
-
+256
 
 
 
@@ -474,11 +474,11 @@ file
 
 
 
-2017-11-18T01:20:21.491000Z
-ec3c6053b66fbb0f9eeabd810044034d
-2017-11-16T12:24:47.977798Z
-202
-dengshien
+2017-11-19T07:52:15.357000Z
+b0658be0914d7630b5ab5aebc69277b0
+2017-11-19T02:16:30.427180Z
+290
+qinyingjie
 
 
 
@@ -500,11 +500,11 @@ dengshien
 
 
 
-2573
+2678
 
 User.java
 file
-
+256
 
 
 
@@ -538,7 +538,7 @@ chenshaohua
 
 ZcInfo.java
 file
-
+256
 
 
 

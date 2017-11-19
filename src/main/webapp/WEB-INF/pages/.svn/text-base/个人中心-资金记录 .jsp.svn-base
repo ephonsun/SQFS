@@ -17,6 +17,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link href="css/common.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="css/user.css" />
 <script type="text/javascript" src="script/jquery.min.js"></script>
+<script type="text/javascript" src="js/user-check-1.0.1.js"></script>
 <script type="text/javascript" src="script/common.js"></script>
 <script src="script/user.js" type="text/javascript"></script>
 <script type="text/javascript" src="script/PersonalCenter.js" ></script>
@@ -60,8 +61,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="fn-left logo"> <a class="" href="index"> <img src="images/logo.png"  title=""> </a> </div>
       <ul class="top-nav fn-clear">
         <li class="on"> <a href="index">首页</a> </li>
-        <li> <a href="invest/investList" class="">我要投资</a> </li>
-        <li> <a href="trans/loan3/home" class="">我要贷款</a> </li>
+        <li> <a href="invest/investList" id="gotoInvest" >我要投资</a> </li>
+ <li> <a href="trans/loan5/home"  id="gotoLoanPage">我要贷款</a>
+ <input type="hidden" value="${sessionScope.info.user_checked } " id="user_check_info_flag"> </li>
         <li> <a href="帮助中心/home">安全保障</a> </li>
         <c:choose>
         	<c:when test="${sessionScope.info.user_id==null }">
@@ -105,9 +107,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <li value="all">全部</li>
                 <li value="ti_balance">转账到余额宝</li>
                 <li value="to_balance">从余额转出</li>
-                <li value="to_frozen">从冻结金额中转出</li>
-                <li value="freeze">冻结</li>
-                <li value="unfreeze">解冻</li>
               </ul>
             </div>
             <span class="money-date2">查询时间</span>

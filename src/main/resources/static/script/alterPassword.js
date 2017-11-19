@@ -145,12 +145,12 @@
                 $.ajax({
                     type: "get", //请求方式
                     dataType: "jsonp",//发送数据的格式
-                    url: "http://106.ihuyi.com/webservice/sms.php?method=Submit&account=C97208215&password=360b89b545b13955c3bb24422e82db7b&mobile="+phone+"&content=您的验证码是："+Num+"。请不要把验证码泄露给其他人。", //发送请求地址带着验证码去后台判断, //发送请求地址
+                    url: "http://106.ihuyi.com/webservice/sms.php?method=Submit&account=C24073395&password=65a0c61ae40eb164b97589597697298f&mobile="+phone+"&content=您的验证码是："+Num+"。请不要把验证码泄露给其他人。", //发送请求地址带着验证码去后台判断, //发送请求地址
                     async: false,//同步 
                     //请求成功后的回调函数有两个参数
                     success: function(data) {
                         flag4 = 1;
-                        if (data.msg == "查询成功") { 
+                        if ("2"==code) { 
                             wait = 300;
                             flaghave = 1;
                             $("#phonVerifys").text("");

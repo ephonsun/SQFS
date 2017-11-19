@@ -108,16 +108,15 @@
 											 td_roleName.text(selroleName);
 											 td_roleCode.text(selroleCode);
 											 td_operator.text("${MANAGER_IN_SESSION.manId}");
-											 td_operateTime.text(data.strOpeTim);
-											 console.log(data.strOpeTime);
+											 td_operateTime.html("<font>"+data.strOpeTime+"</fnot>");
 										 }
 									 });
 									 
-									 $.messager.show({
+									/*  $.messager.show({
 		    	   						 title:'密码初始化',
 		    	   						 msg:"<span style='color:green;'>"+"密码初始化成功！"+"</span>",
 		    	   						showType:'slide'
-									 });
+									 }); */
 									 return false;
 			 				 	 }else {
 									 $.messager.alert("修改角色","<span style='color:red;'>"+"修改角色失败，请稍后重试！"+"</span>","error");
@@ -133,11 +132,13 @@
 			  }
 			 
 		  }); 
-		 /* $('#bt_cancel').on('click', function(){
-			window.opener = null;
-            window.open('', '_self');
-            window.close();
-		 });  */
+		  /** 取消按钮关闭窗口*/
+		  $('#bt_cancel').on('click', function(){
+			  $('#iframe', parent.document).css('display', 'none');
+			  $('#divDialog', parent.document).parent().css('display', 'none');
+			  $('.window-shadow', parent.document).css('display', 'none');
+			  $('.window-mask', parent.document).css('display', 'none');
+		 });  
 		 
 	});
 </script>

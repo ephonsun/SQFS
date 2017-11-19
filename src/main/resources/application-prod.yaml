@@ -1,7 +1,7 @@
 # 生产环境服务URL
 #    1) context-path: 项目名
 server:
-  address: 127.0.0.1
+  address: 192.168.188.33
   port: 8080
   context-path: /sq
 # 数据库连接配置

@@ -7,9 +7,11 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,7 @@ import com.sqfs.service.ManagerService;
  * @date 2017年11月10日下午12:08:40
  */
 @Controller
+@Scope("prototype")
 @RequestMapping("/backStage/man")
 @Slf4j
 public class ManagerController {

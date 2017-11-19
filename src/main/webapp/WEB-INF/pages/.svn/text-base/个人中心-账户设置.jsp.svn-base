@@ -18,6 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="css/user.css" />
 <link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
 <script type="text/javascript" src="script/jquery.min.js"></script>
+<script type="text/javascript" src="js/user-check-1.0.1.js"></script>
 <script type="text/javascript" src="script/common.js"></script>
 <script src="script/user.js" type="text/javascript"></script>
 </head>
@@ -60,8 +61,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="fn-left logo"> <a class="" href="index"> <img src="images/logo.png"  title=""> </a> </div>
       <ul class="top-nav fn-clear">
         <li class="on"> <a href="index">首页</a> </li>
-        <li> <a href="invest/investList" class="">我要投资</a> </li>
-        <li> <a href="trans/loan3/home" class="">我要贷款</a> </li>
+        <li> <a href="invest/investList" id="gotoInvest" >我要投资</a> </li>
+        <li> <a href="trans/loan5/home"  id="gotoLoanPage">我要贷款</a><input type="hidden" value="${sessionScope.info.user_checked } " id="user_check_info_flag"> </li>
         <li> <a href="帮助中心/home">安全保障</a> </li>
         <c:choose>
         	<c:when test="${sessionScope.info.user_id==null }">
@@ -83,9 +84,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div id="personal-left" class="personal-left">
       <ul>
         <li class="pleft-cur"><span><a href="trans/PersonalCenter/getPensonalInformation/${sqUser.user_id }"><i class="dot dot1"></i>账户总览</a></span></li>
-        <li><span><a style="font-size:14px;text-align:center;width:115px;padding-right:35px;" href="个人中心-资金记录 /home">资金记录</a></span></li>
-        <li><span><a style="font-size:14px;text-align:center;width:115px;padding-right:35px;" href="个人中心-投资记录/home">投资记录</a></span></li>
-        <li><span><a style="font-size:14px;text-align:center;width:115px;padding-right:35px;" href="个人中心-回款计划/home">回款计划</a></span></li>
+        <li><span><a style="font-size:14px;text-align:center;width:115px;padding-right:35px;" href="trans/PersonalCenter/getMoneyRecord/${sqUser.user_id }">资金记录</a></span></li>
+        <li><span><a style="font-size:14px;text-align:center;width:115px;padding-right:35px;" href="trans/PersonalCenter/getDepositsHistory/${sqUser.user_id }">投资记录</a></span></li>
+        <li><span><a style="font-size:14px;text-align:center;width:115px;padding-right:35px;" href="trans/PersonalCenter/getReturnedMoneyPlan/${sqUser.user_id }">回款计划</a></span></li>
         <li class=""><span><a href="trans/PersonalCenter/OpenThirdParty/${sqUser.user_id }"><i class="dot dot02"></i>开通第三方</a> </span> </li>
         <li><span><a href="trans/PersonalCenter/Recharge/${sqUser.user_id }/2"><i class="dot dot03"></i>充值</a></span></li>
         <li class=""><span><a href="trans/PersonalCenter/Withdraw/${sqUser.user_id }/2"><i class="dot dot04"></i>提现</a></span></li>
@@ -334,7 +335,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          <li><i class="grzxbg p-right"></i><span class="zhsz-span1">手机号</span><span class="zhsz-span2">${sqUser.phone }</span><span class="zhsz-span3"><a href="javascript:void(0)" onclick="showSpan('alert-checkOldMobile')">更改</a></span><input type="hidden" value="false" id="authenticationMobile"></li>
          <li>
           	<c:choose>
-          		<c:when test="${sqUser.id_card !=null }">
+          		<c:when test="${sqUser.id_card !=null and sqUser.id_card !='' }">
           			<i class="grzxbg p-right"></i>
           			<span class="zhsz-span1">身份认证</span>
           			<span class="zhsz-span2">${sqUser.id_card }</span>
@@ -350,7 +351,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 </li>
          <li>
 				<c:choose>
-					<c:when test="${sqUser.third_party_payment !=null }">
+					<c:when test="${sqUser.third_party_payment !=null and sqUser.third_party_payment !='' }">
 						<i class="grzxbg p-right"></i>
           				<span class="zhsz-span1">第三方支付</span>
 						<span class="zhsz-span2">已开通</span>
@@ -366,7 +367,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          </li>
          <li>
 			<c:choose>
-				<c:when test="${sqUser.email != null }">
+				<c:when test="${sqUser.email != null and sqUser.email !='' }">
 					<i class="grzxbg p-right"></i>
          			<span class="zhsz-span1">电子邮箱</span>
 					<span class="zhsz-span2">
@@ -385,10 +386,42 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</c:choose>
          </li>
          <li>
-         	<i class="grzxbg p-right"></i>
-         	<span class="zhsz-span1">登录密码</span>
-         	<span class="zhsz-span2"></span>
-         	<span class="zhsz-span3"><a href="javascript:void(0)" onclick="showSpan('alert-updatePass')">更改</a></span>
+			<c:choose>
+				<c:when test="${sqUser.user_checked != 0}">
+					<i class="grzxbg p-right"></i>
+         			<span class="zhsz-span1">实名认证</span>
+					<span class="zhsz-span2">
+						已认证
+					</span>
+				</c:when>
+				<c:otherwise>
+					<i class="grzxbg p-danger"></i>
+         			<span class="zhsz-span1">实名认证</span>
+					<span class="zhsz-span2">
+						未认证
+					</span>
+        			<span class="zhsz-span3"> <a href="loan3/home" >添加认证</a></span>
+				</c:otherwise>
+			</c:choose>
+         </li>
+          <li>
+			<c:choose>
+				<c:when test="${sqUser.user_checked == 1 }">
+					<i class="grzxbg p-right"></i>
+         			<span class="zhsz-span1">实名认证</span>
+					<span class="zhsz-span2">
+						已认证
+					</span>
+				</c:when>
+				<c:otherwise>
+					<i class="grzxbg p-danger"></i>
+         			<span class="zhsz-span1">实名认证</span>
+					<span class="zhsz-span2">
+						未认证
+					</span>
+        			<span class="zhsz-span3"> <a href="loan3/home" >添加认证</a></span>
+				</c:otherwise>
+			</c:choose>
          </li>
         </ul>
       </div>
@@ -480,7 +513,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		/***************************************************************************************************/
 		/***************************************************************************************************/
 		//自定义发送验证码
-		var wait = 10;
+		var wait = 60;
 		
 		function sendMsg(that){
 			var phone = $("#oldMobilePhoneNumber").val();
@@ -511,7 +544,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				clearInterval(intervalid);
 					$("#checkOldMobileForm\\:sendAuthCodeBtn").attr("onclick","sendMsg(this)");
 					$("#freecode").text("免费获取验证码");
-				  	wait = 10;
+				  	wait = 60;
 			}else{
 				$("#checkOldMobileForm\\:sendAuthCodeBtn").attr("onclick","return false");
 				$("#checkOldMobileForm\\:sendAuthCodeBtn").css("cursor","default");
@@ -593,7 +626,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript">
 			//<![CDATA[
 			           //手机号更新获取短信验证码
-			           var wait = 10;
+			           var wait = 60;
 			           function getMsg(){
 			        	   //手机号
 			        	   var mobile=$("#updateMonbileForm\\:mobileNumber2").val();
@@ -652,7 +685,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				   				clearInterval(intervalid);
 				   					$("#updateMonbileForm\\:sendAuthCodeBtn").attr("onclick","getMsg()");
 				   					$("#freecode2").text("免费获取验证码");
-				   				  	wait = 10;
+				   				  	wait = 60;
 				   			}else{
 				   				$("#updateMonbileForm\\:sendAuthCodeBtn").attr("onclick","return false");
 				   				$("#updateMonbileForm\\:sendAuthCodeBtn").css("cursor","default");
@@ -913,136 +946,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </form>
       </div>
     </div>
-    <script type="text/javascript">
-			//<![CDATA[
-			           //验证原密码
-			           function checkupdatePassFormOldPassword()
-			           {
-			        	   var oldPassword=$("#updatePassForm\\:oldPassword").val();
-			        	   var nullFlag=(oldPassword=="");
-			        	   if(nullFlag)
-				   			{
-				   				$("#updatePassForm\\:oldPassword_message").remove();
-				   				var $span = $("<span id=updatePassForm\:oldPassword_message class=error>请输入密码</span>");
-				   				$("#oldPasswordErrorDiv").append($span);
-				   				return false;
-				   			}
-				   			else
-				   			{
-				   				var oldPasswordError=$("#oldPasswordErrorDiv").text();
-				   				if(oldPasswordError=='请输入密码')
-				   				{
-				   					$("#updatePassForm\\:oldPassword_message").remove();
-				   				}
-				   			}
-			        	   return true;
-			           }
-			           //验证输入密码框
-			           function checkPassword()
-			           {
-			        	   var password=$("#updatePassForm\\:password").val();
-			        	   var nullFlag=(password=="");
-			        	   if(nullFlag)
-				   			{
-				   				$("#updatePassForm\\:password_message").remove();
-				   				var $span = $("<span id=updatePassForm\:password_message class=error>请输入新密码</span>");
-				   				$("#passwordErrorDiv").append($span);
-				   				return false;
-				   			}
-				   			else
-				   			{
-				   				var oldpassword=$("#updatePassForm\\:oldPassword").val();
-				   				var errorMessage=$("#oldPasswordErrorDiv").text();
-				   				
-				   				var nullOldFlag=(oldpassword=="");
-				   				var errorFlag=(errorMessage=="");
-				   				 if(!nullOldFlag&&errorFlag&&(oldpassword==password))
-				   				{
-				   					$("#updatePassForm\\:password_message").remove();
-					   				var $span = $("<span id=updatePassForm\:password_message class=error>输入密码不能与原密码相同</span>");
-					   				$("#passwordErrorDiv").append($span);
-					   				return false;
-				   				}
-				   				var nullerror=$("#passwordErrorDiv").text();
-				   				if(nullerror=="请输入密码")
-				   				{
-				   					$("#updatePassForm\\:password_message").remove();
-				   				} 
-				   			}
-			        	   return true;
-			           }
-			           //验证重输密码框
-			           function checkRepassword()
-			   		   {
-				   			var password=$("#updatePassForm\\:password").val();
-				   			var repassword=$("#updatePassForm\\:repassword").val();
-				   			var flag=(password==repassword);
-				   			var nullFlag=(repassword=="");
-				   			if(nullFlag)
-				   			{
-				   				$("#repassword_message").remove();
-				   				var $span = $("<span id=repassword_message class=error>请输入确认密码</span>");
-				   				$("#repasswordErrorDiv").append($span);
-				   				return false;
-				   			}
-				   			else
-				   			{
-				   				$("#repassword_message").remove();
-				   			}
-				   			if(flag==false)
-				   			{
-				   				$("#repassword_message").remove();
-				   				var $span = $("<span id=repassword_message class=error>两次密码不同</span>");
-				   				$("#repasswordErrorDiv").append($span);
-				   				return false;
-				   			}
-				   			else
-				   			{
-				   				$("#repassword_message").remove();
-				   			}
-				   			return true;
-			   		   }
-			           function checkupdatePassFormAll()
-			           {
-			        	   checkupdatePassFormOldPassword();
-			        	   checkPassword();
-			        	   checkRepassword();
-			        	   var oldPasswordFlag=$("#oldPasswordErrorDiv").text()=="";
-			        	   var passwordFlag=$("#passwordErrorDiv").text()=="";
-			        	   var repasswordFlag=$("#repasswordErrorDiv").text()=="";
-			        	   return oldPasswordFlag&&passwordFlag&&repasswordFlag;
-			           }
-			//]]>
-		</script>
-    <div class="alert-450" id="alert-updatePass" style="display: none;">
-      <div class="alert-title">
-        <h3>修改密码</h3>
-        <span class="alert-close" onclick="displaySpan('alert-updatePass')"></span></div>
-      <div class="alert-main">
-        <form id="updatePassForm" name="updatePassForm" method="post" action="" enctype="application/x-www-form-urlencoded">
-          <input type="hidden" name="updatePassForm" value="updatePassForm">
-          <ul>
-            <li>
-              <label class="txt-name">请输入原密码</label>
-              <input id="updatePassForm:oldPassword" type="password" name="updatePassForm:oldPassword" value="" maxlength="20" onblur="jsf.util.chain(this,event,'return checkupdatePassFormOldPassword()','mojarra.ab(this,event,\'blur\',0,0)')" class="txt235">
-              <div id="oldPasswordErrorDiv" class="alert-error120"></div>
-            </li>
-            <li>
-              <label class="txt-name">请输入新密码</label>
-              <input id="updatePassForm:password" type="password" name="updatePassForm:password" value="" maxlength="20" onblur="jsf.util.chain(this,event,'return checkPassword()','mojarra.ab(this,event,\'blur\',0,0)')" class="txt235">
-              <div id="passwordErrorDiv" class="alert-error120"></div>
-            </li>
-            <li>
-              <label class="txt-name">请确认新密码</label>
-              <input id="updatePassForm:repassword" type="password" name="updatePassForm:repassword" value="" maxlength="20" onblur="return checkRepassword()" class="txt235">
-              <div id="repasswordErrorDiv" class="alert-error120"></div>
-            </li>
-            <li>
-              <input type="submit" name="updatePassForm:j_idt174" value="确 认" class="btn-ok btn-235 txt-right" onclick="return checkupdatePassFormAll()">
-            </li>
-          </ul>
-        </form>
-      </div>
+    
+    
       <script type="text/javascript">
 				//<![CDATA[
 		    	if(window.ActiveXObject)

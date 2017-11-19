@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @date 2017年11月9日上午11:24:33
  */
 @Controller
+@Scope("prototype")
 public class VerifyCodeAction{
 
 	private static final long serialVersionUID = 2554915394390709685L;

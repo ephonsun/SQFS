@@ -1,10 +1,12 @@
 package com.sqfs.controller;
 
 import org.springframework.boot.autoconfigure.web.ErrorController;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@Scope("prototype")
 public class MainsiteErrorController implements ErrorController{
 	
 	private static final String  ERROR_PATH="/error";

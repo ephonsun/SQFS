@@ -17,6 +17,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link href="css/common.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="css/user.css" />
 <script type="text/javascript" src="script/jquery.min.js"></script>
+<script type="text/javascript" src="js/user-check-1.0.1.js"></script>
 <script type="text/javascript" src="script/common.js"></script>
 <script src="script/user.js" type="text/javascript"></script>
 
@@ -61,8 +62,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="fn-left logo"> <a class="" href="index"> <img src="images/logo.png"  title=""> </a> </div>
       <ul class="top-nav fn-clear">
         <li class="on"> <a href="index">首页</a> </li>
-        <li> <a href="invest/investList" class="">我要投资</a> </li>
-        <li> <a href="trans/loan3/home" class="">我要贷款</a> </li>
+         <li> <a href="invest/investList" id="gotoInvest" >我要投资</a> </li>
+ <li> <a href="trans/loan5/home"  id="gotoLoanPage">我要贷款</a>
+ <input type="hidden" value="${sessionScope.info.user_checked } " id="user_check_info_flag"> </li>
         <li> <a href="帮助中心/home">安全保障</a> </li>
         <c:choose>
         	<c:when test="${sessionScope.info.user_id==null }">
@@ -109,8 +111,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <span id="form:dataTable">
           <div class="invest-tab">
             <ul>
-              <li class="on" id="bid"><span>投标中</span></li>
-              <li class="" id="returnedMoney"><span>回款中</span></li>
+              <li class="on" id="bid"><span>同意</span></li>
+              <li class="" id="returnedMoney"><span>驳回</span></li>
               <li class="" id="finished"><span>已结束</span></li>
             </ul>
           </div>
@@ -147,7 +149,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <ul id="investnote-list1" style="display: block;">
             	<c:forEach items="${sqUser.invests }" var="invests">
 					<c:choose>
-						<c:when test="${invests.tz_state=='投标中' }">
+						<c:when test="${invests.tz_state=='同意' }">
 						<li><span class="investnote-w1"><fmt:formatDate value="${invests.tz_time }" pattern="yyyy-MM-dd"/></span>
 							<span class="investnote-w2">${invests.loan.loan_name }</span>
 							<span class="investnote-w3">${invests.tz_state }</span>
@@ -161,7 +163,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <ul id="investnote-list2" style="display: none;">
             	<c:forEach items="${sqUser.invests }" var="invests">
 					<c:choose>
-						<c:when test="${invests.tz_state=='回款中' }">
+						<c:when test="${invests.tz_state=='驳回' }">
 						<li><span class="investnote-w1"><fmt:formatDate value="${invests.tz_time }" pattern="yyyy-MM-dd"/></span>
 							<span class="investnote-w2">${invests.loan.loan_name }</span>
 							<span class="investnote-w3">${invests.tz_state }</span>

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,6 +28,7 @@ import com.sqfs.utils.UuidUtil;
  * @version
  */
 @Controller
+@Scope("prototype")
 @RequestMapping("/invest")
 @Slf4j
 public class ProductController {
@@ -99,7 +101,7 @@ public class ProductController {
 		Loan loan=productService.getLoansByLoanId(loan_dd_id);
 		 //通过借贷订单id得到当前借贷产品的投资情况
 		 List<Invest> investsList=productService.getInvestsListByLoanId(loan);
-		 
+		 log.info("loan==============="+loan);
 		String token =UuidUtil.getUuid();//创建令牌
 		session.setAttribute("token",token );
 		ModelAndView mv=new ModelAndView();

@@ -45,11 +45,11 @@
       
     	var manTab = $("#manTab");
     	$('#manTab tr').each(function(){
-    		var td = $(this).find('td').eq(3);
+    		var td = $(this).find('td').eq(0);
     		if (td.val() != null){
-    			if (td.text() == "A"){
-    			$(this).find("input:eq(0)").attr("disabled", true).css("background","gray");  
-    			$(this).find("input:eq(1)").attr("disabled", true).css("background","gray");  
+    			if (td.text() == "${MANAGER_IN_SESSION.manId}"){
+    			$(this).find("input:eq(0)").attr("disabled", true).css("background","cccccc").css("color","cccccc");  
+    			$(this).find("input:eq(1)").attr("disabled", true).css("background","cccccc").css("color","cccccc");  
     			}
     		}
     	});
@@ -317,9 +317,9 @@
 							<td>${man.role.roleName}</td>
 							<td>${man.role.roleCode}</td>
 							<td>${man.operator}</td>
-							<td><fmt:formatDate value="${man.operateTime}" pattern="YYYY-MM-dd"/></td>
+							<td><fmt:formatDate value="${man.operateTime}" pattern="yyyy-MM-dd"/></td>
 							<td>
-								<input type="button" value="修改角色" style="background-color:ccddff"
+								<input type="button" value="修改角色" style="background-color:ccddff;"
 									class="modifyRole"/>
 								<input type="button" value="密码初始化" style="background-color:ccddff"
 								class="restPassword" />

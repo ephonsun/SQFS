@@ -18,6 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="css/user.css" />
 <link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
 <script type="text/javascript" src="script/jquery.min.js"></script>
+<script type="text/javascript" src="js/user-check-1.0.1.js"></script>
 <script type="text/javascript" src="script/common.js"></script>
 <script src="script/user.js" type="text/javascript"></script>
 </head>
@@ -60,8 +61,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="fn-left logo"> <a class="" href="/"> <img src="images/logo.png"  title=""> </a> </div>
       <ul class="top-nav fn-clear">
         <li class="on"> <a href="index">首页</a> </li>
-        <li> <a href="invest/investList" class="">我要投资</a> </li>
-        <li> <a href="trans/loan3/home" class="">我要贷款</a> </li>
+         <li> <a href="invest/investList" id="gotoInvest" >我要投资</a> </li>
+ <li> <a href="trans/loan5/home"  id="gotoLoanPage">我要贷款</a>
+ <input type="hidden" value="${sessionScope.info.user_checked } " id="user_check_info_flag"> </li>
         <li> <a href="帮助中心/home">安全保障</a> </li>
         <c:choose>
         	<c:when test="${sessionScope.info.user_id==null }">
@@ -156,7 +158,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <h3>激活邮箱</h3>
         </div>
         <div class="alert-main">
-          <form id="activeEmail" name="activeEmail" method="post" action="trans/PersonalCenter/PersonalCenterEmail/${sessionScope.info.user_id }/register/123" enctype="application/x-www-form-urlencoded" target="_blank">
+          <form id="activeEmail" name="activeEmail" method="post" action="trans/PersonalCenter/PersonalCenterEmail/${sessionScope.info.user_id }/register/123" enctype="application/x-www-form-urlencoded" >
             <input type="hidden" name="activeEmail" value="activeEmail">
             <ul>
               <li>
@@ -168,7 +170,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
               </li>
             </ul>
-            <input type="submit" name="activeEmail:j_idt108" value="立即激活邮箱" class="btn-ok txt-right" onclick="return checkActiveEmailAll()">
+            <input type="submit" name="activeEmail:j_idt108" value="立即激活邮箱" class="btn-ok txt-right" onclick="return checkactiveEmailFormEmail()">
             <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="3539659789631542353:-7321825572772818867" autocomplete="off">
           </form>
         </div>
